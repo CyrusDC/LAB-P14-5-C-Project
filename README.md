@@ -10,7 +10,7 @@ Lim Jun Wei (2501117)\
 Muhamad Akid Qusyairi Bin Muhamad Riduan (2500882)
 
 Description:\
-Class Management System (CMS) programme, a simple database management system in C, where the user can\
+Class Management System (CMS) programme, a simple database management system in C, where the user can:\
 • OPEN: to open the database file and read in all the records\
 • SHOW ALL: to show all the current records.\
 • INSERT: to add a new record to the database.\
