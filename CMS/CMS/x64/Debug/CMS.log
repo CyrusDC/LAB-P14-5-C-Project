@@ -1,2 +1,4 @@
-﻿  Storage.c
+﻿  CMS.c
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(28,8): warning C4013: 'strncmp' undefined; assuming extern returning int
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(32,8): warning C4013: 'strlen' undefined; assuming extern returning int
   CMS.vcxproj -> B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\x64\Debug\CMS.exe

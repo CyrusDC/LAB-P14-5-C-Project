@@ -14,7 +14,7 @@ typedef Student_records* RecordPtr;
 
 //--------------------------------------------------------------------//
 // Storage.c functions
-RecordPtr load_Record(int id, const char* name, const char* program, double marks);
+RecordPtr load_Record(int id, const char* name, const char* program, double marks); // Open file and load data into list
 
 
 

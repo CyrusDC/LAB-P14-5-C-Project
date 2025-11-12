@@ -8,15 +8,15 @@
 #include <stdlib.h>
 #include "CMS.h"
 
+// Global Variables
+char buffer[256];
+int id;
+char name[100];
+char program[100];
+double marks;
 //-------------------------------------------------------------------//
 // OPEN Function
 int Open_File(const char *file, RecordPtr* head) {
-	char buffer[256];
-	int id;
-	char name[100];
-	char program[100];
-	double marks;
-
 	FILE* fh_output;
 	fh_output = fopen(file, "r");
 	if (fh_output == NULL) {
@@ -61,7 +61,7 @@ int Open_File(const char *file, RecordPtr* head) {
 void Show_All(RecordPtr head) {
 	RecordPtr current = head;
 	if (current == NULL) {
-		printf("CMS: No records found in the table \"StudentRecords\".\n");
+		printf("CMS: No records found. Please Open a file first.\n");
 		return;
 	}
 	else {
