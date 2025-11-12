@@ -21,6 +21,9 @@
     <ClCompile Include="CMS.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Storage.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMS.h">

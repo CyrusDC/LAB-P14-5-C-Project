@@ -1,6 +1,7 @@
 
 // This File will handle the user input and deal with any weird user inputs
 
+// Include Libraries
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
@@ -22,9 +23,9 @@ typedef enum {
 	CMD_UNKNOWN
 } CommandType;
 
-CommandType getCommandType(const char* command) {
+static CommandType getCommandType(const char* command) {
 	if (strcmp(command, "open") == 0) return CMD_OPEN;
-	if (strcmp(command, "goodbye") == 0) return CMD_SAVE;
+	if (strcmp(command, "save") == 0) return CMD_SAVE;
 	if (strcmp(command, "help") == 0) return CMD_HELP;
 	if (strcmp(command, "showall") == 0) return CMD_SHOWALL;
 	if (strcmp(command, "insert") == 0) return CMD_INSERT;
@@ -35,7 +36,7 @@ CommandType getCommandType(const char* command) {
 	return CMD_UNKNOWN;
 }
 
-int isValidUserId(const char* id) {
+static int isValidUserId(const char* id) {
 	if (id[0] == '\0') return 0;  // reject empty string
 
 	for (int i = 0; id[i] != '\0'; i++) {
@@ -47,34 +48,35 @@ int isValidUserId(const char* id) {
 }
 
 
-
-
-int main(void) 
-{
+int main() {
+	
+	// Variables
 	char command_str[20];
 	char user_id[20];
+	char file_name[20];
+	char terminal_Name[] = "CMS";
 	int program_running = 1;
+	RecordPtr head = NULL;
+
 	printf("Welcome to the Class Management System (CMS)\n");
 
-	while (program_running) {
-
-		while (1) { // loop to check for valid user name
-			printf("Please enter username:\n");
-			if (scanf("%19s", user_id) != 1) {
-				clearerr(stdin);
-				continue;
-			}
-			if (isValidUserId(user_id)) {
-				break; // valid username, exit loop
-			}
-			else {
-				printf("Invalid username. Please try again.\n");
-			}
+	// loop to check for valid user name
+	while (1) {
+		printf("Please enter username:\n");
+		scanf("%s", user_id);
+		if (isValidUserId(user_id)) {
+			break; // valid username, exit loop
 		}
-
+		else {
+			printf("Invalid username. Please try again.\n");
+		}
+	}
+	
+	// Program loop
+	while (program_running) {
 		// input command
-		printf("Please type a Command:\n");
-		scanf("%s", command_str);
+		printf("%s: Please type a Command (Type help to list commands)\n%s: ", terminal_Name, user_id);
+		scanf("%s" ,command_str);
 
 		// converts the string input to all lower letters
 		for (int i = 0; command_str[i] != '\0'; i++) {
@@ -83,7 +85,14 @@ int main(void)
 
 		switch (getCommandType(command_str)) {
 			case CMD_OPEN:
-				printf("Hello there!\n");
+				printf("%s: Please type file name\n%s: ", terminal_Name,user_id);
+				scanf("%s" ,file_name);
+				if (Open_File(file_name, &head) == 1) {
+					printf("%s: The database file %s is successfully opened.\n", terminal_Name, file_name);
+				}
+				else {
+					printf("%s: The file was not successfully opened.\n", terminal_Name);
+				}
 				break;
 			case CMD_SAVE:
 				printf("See you later!\n");
@@ -101,19 +110,19 @@ int main(void)
 					" 9) EXIT    : Exits the program\n");
 				break;
 			case CMD_SHOWALL:
-				printf("Available commands: hello, goodbye, help\n");
+				Show_All(head);
 				break;
 			case CMD_INSERT:
-				printf("Available commands: hello, goodbye, help\n");
+				printf("Insert\n");
 				break;
 			case CMD_QUERY:
-				printf("Available commands: hello, goodbye, help\n");
+				printf("Query\n");
 				break;
 			case CMD_UPDATE:
-				printf("Available commands: hello, goodbye, help\n");
+				printf("update\n");
 				break;
 			case CMD_DELETE:
-				printf("Available commands: hello, goodbye, help\n");
+				printf("delete\n");
 				break;
 			case CMD_EXIT:
 				printf("Exiting CMS.....\n");

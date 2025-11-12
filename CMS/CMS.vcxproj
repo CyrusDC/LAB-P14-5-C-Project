@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="CMS.c" />
     <ClCompile Include="Main.c" />
+    <ClCompile Include="Storage.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMS.h" />
