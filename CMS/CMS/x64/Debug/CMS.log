@@ -1,4 +1,7 @@
 ﻿  CMS.c
-B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(28,8): warning C4013: 'strncmp' undefined; assuming extern returning int
-B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(32,8): warning C4013: 'strlen' undefined; assuming extern returning int
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(34,8): warning C4013: 'strncmp' undefined; assuming extern returning int
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(38,8): warning C4013: 'strlen' undefined; assuming extern returning int
+  Main.c
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(115,6): warning C4013: 'Clear_List' undefined; assuming extern returning int
+  Generating Code...
   CMS.vcxproj -> B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\x64\Debug\CMS.exe

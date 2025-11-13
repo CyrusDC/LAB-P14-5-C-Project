@@ -10,7 +10,7 @@
 #include "CMS.h"
 
 
-typedef enum {
+typedef enum { // create a set of constant commands
 	CMD_OPEN,
 	CMD_SAVE,
 	CMD_HELP,
@@ -23,7 +23,7 @@ typedef enum {
 	CMD_UNKNOWN
 } CommandType;
 
-static CommandType getCommandType(const char* command) {
+static CommandType getCommandType(const char* command) { // map the constant commmands to a input string
 	if (strcmp(command, "open") == 0) return CMD_OPEN;
 	if (strcmp(command, "save") == 0) return CMD_SAVE;
 	if (strcmp(command, "help") == 0) return CMD_HELP;
@@ -47,17 +47,42 @@ static int isValidUserId(const char* id) {
 	return 1;  // everything else is allowed
 }
 
+void decleration() {
+	printf("Declaration\n"
+	"SIT’s policy on copying does not allow the students to copy source code as well as assessment solutions\n"
+	"from another person AI or other places. It is the students’ responsibility to guarantee that their\n"
+	"assessment solutions are their own work. Meanwhile, the students must also ensure that their work is\n"
+	"not accessible by others. Where such plagiarism is detected, both of the assessments involved will\n"
+	"receive ZERO mark.\n\n"
+	"We hereby declare that:\n"
+	"• We fully understand and agree to the abovementioned plagiarism policy.\n"
+	"• We did not copy any code from others or from other places.\n"
+	"• We did not share our codes with others or upload to any other places for public access and will do that in the future.\n"
+	"• We agree that our project will receive Zero mark if there is any plagiarism detected.\n"
+	"• We agree that we will not disclose any information or material of the group project to others or upload to any other places for public access.\n"
+	"• We agree that we did not copy any code directly from AI generated sources.\n"
+	"Declared by: Group Name (please insert your group name)\n"
+	"Team members:\n"
+	"1. XXX\n"
+	"2. XXX\n"
+	"3. XXX\n"
+	"4. XXX\n"
+	"5. XXX\n\n"
+	"Date: (please insert the date when you submit your group project)."
+	);
+}
 
 int main() {
 	
 	// Variables
 	char command_str[20];
 	char user_id[20];
-	char file_name[20];
+	char file_name[20] = "P14_5-CMS.txt";
 	char terminal_Name[] = "CMS";
 	int program_running = 1;
 	RecordPtr head = NULL;
 
+	decleration();
 	printf("Welcome to the Class Management System (CMS)\n");
 
 	// loop to check for valid user name
@@ -85,8 +110,11 @@ int main() {
 
 		switch (getCommandType(command_str)) {
 			case CMD_OPEN:
-				printf("%s: Please type file name\n%s: ", terminal_Name,user_id);
-				scanf("%s" ,file_name);
+				// Checks if the list is empty if it is not empty clear the list
+				if (head != NULL) {
+					Clear_List(head);
+					head = NULL;
+				}
 				if (Open_File(file_name, &head) == 1) {
 					printf("%s: The database file %s is successfully opened.\n", terminal_Name, file_name);
 				}

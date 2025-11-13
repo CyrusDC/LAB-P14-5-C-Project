@@ -14,6 +14,12 @@ int id;
 char name[100];
 char program[100];
 double marks;
+
+// Headers for output
+void header_output() {
+	printf("CMS: Here are all the records found in the table \"StudentRecords\".\n");
+	printf("ID        Name                Programme               Mark\n");
+}
 //-------------------------------------------------------------------//
 // OPEN Function
 int Open_File(const char *file, RecordPtr* head) {
@@ -38,7 +44,7 @@ int Open_File(const char *file, RecordPtr* head) {
 					if(*head == NULL) {
 						*head = node; // Assigns node as the head
 					}
-					else { // if head is not empty loop throught the list until you reach the tail and insert the node
+					else { // if head is not empty loop through the list until you reach the tail and insert the node
 						RecordPtr current = *head;
 						while (current->next != NULL) { 
 							current = current->next;
@@ -65,9 +71,7 @@ void Show_All(RecordPtr head) {
 		return;
 	}
 	else {
-		printf("CMS: Here are all the records found in the table \"StudentRecords\".\n");
-		printf("ID        Name               Programme               Mark\n");
-		printf("-------------------------------------------------------------\n");
+		header_output();
 		while (current != NULL) {
 			printf("%-8d  %-18s  %-22s  %.1f\n",
 				current->id,
@@ -80,6 +84,7 @@ void Show_All(RecordPtr head) {
 }
 //-------------------------------------------------------------------//
 // INSERT Function
+
 //-------------------------------------------------------------------//
 // QUERY Function
 //-------------------------------------------------------------------//

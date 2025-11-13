@@ -21,5 +21,16 @@ RecordPtr load_Record(int id, const char* name, const char* program, double mark
     newNode->next = NULL;
     return newNode;
 }
-
-
+//-----------------------------------------------------------------------//
+// Clear the list
+void Clear_List(RecordPtr head) {
+    RecordPtr temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp->name);
+        free(temp->program);
+        free(temp);
+    }
+}
+//-----------------------------------------------------------------------//
