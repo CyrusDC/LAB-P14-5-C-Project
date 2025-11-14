@@ -1,7 +1,6 @@
-﻿  CMS.c
-B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(34,8): warning C4013: 'strncmp' undefined; assuming extern returning int
-B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(38,8): warning C4013: 'strlen' undefined; assuming extern returning int
-  Main.c
-B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(115,6): warning C4013: 'Clear_List' undefined; assuming extern returning int
+﻿  Main.c
+  Storage.c
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Storage.c(39,46): warning C4028: formal parameter 2 different from declaration
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Storage.c(43,25): warning C4047: '==': 'int' differs in levels of indirection from 'int *'
   Generating Code...
   CMS.vcxproj -> B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\x64\Debug\CMS.exe

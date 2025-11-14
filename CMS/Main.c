@@ -9,8 +9,8 @@
 #include <ctype.h>
 #include "CMS.h"
 
-
-typedef enum { // create a set of constant commands
+// create a set of constant commands
+typedef enum {
 	CMD_OPEN,
 	CMD_SAVE,
 	CMD_HELP,
@@ -23,7 +23,8 @@ typedef enum { // create a set of constant commands
 	CMD_UNKNOWN
 } CommandType;
 
-static CommandType getCommandType(const char* command) { // map the constant commmands to a input string
+// map the constant commmands to a input string
+static CommandType getCommandType(const char* command) { 
 	if (strcmp(command, "open") == 0) return CMD_OPEN;
 	if (strcmp(command, "save") == 0) return CMD_SAVE;
 	if (strcmp(command, "help") == 0) return CMD_HELP;
@@ -36,6 +37,7 @@ static CommandType getCommandType(const char* command) { // map the constant com
 	return CMD_UNKNOWN;
 }
 
+// User name validation
 static int isValidUserId(const char* id) {
 	if (id[0] == '\0') return 0;  // reject empty string
 
@@ -68,7 +70,7 @@ void decleration() {
 	"3. XXX\n"
 	"4. XXX\n"
 	"5. XXX\n\n"
-	"Date: (please insert the date when you submit your group project)."
+	"Date: (please insert the date when you submit your group project).\n\n"
 	);
 }
 
@@ -80,6 +82,7 @@ int main() {
 	char file_name[20] = "P14_5-CMS.txt";
 	char terminal_Name[] = "CMS";
 	int program_running = 1;
+	int Student_ID;
 	RecordPtr head = NULL;
 
 	decleration();
@@ -144,7 +147,9 @@ int main() {
 				printf("Insert\n");
 				break;
 			case CMD_QUERY:
-				printf("Query\n");
+				printf("Please input Student ID number:\n");
+				scanf("%d", &Student_ID);
+				Search_id(head, Student_ID);
 				break;
 			case CMD_UPDATE:
 				printf("update\n");

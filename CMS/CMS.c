@@ -87,6 +87,21 @@ void Show_All(RecordPtr head) {
 
 //-------------------------------------------------------------------//
 // QUERY Function
+void Search_id(RecordPtr head, int *Student_ID) {
+	RecordPtr found = Search_Record(head, Student_ID);
+	if (found != NULL) {
+		printf("CMS: The record with ID=%d is found in the data table.\n", Student_ID);
+		printf("ID        Name                Programme               Mark\n");
+		printf("%-8d  %-18s  %-22s  %.1f\n",
+			found->id,
+			found->name,
+			found->program,
+			found->marks);
+	}
+	else {
+		printf("CMS: The record with ID=%d does not exist..\n", Student_ID);
+	}
+}
 //-------------------------------------------------------------------//
 // UPDATE Function
 //-------------------------------------------------------------------//

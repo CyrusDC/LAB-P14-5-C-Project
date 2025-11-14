@@ -14,13 +14,14 @@ typedef Student_records* RecordPtr;
 
 //--------------------------------------------------------------------//
 // Storage.c functions
-RecordPtr load_Record(int id, const char* name, const char* program, double marks); // Open file and load data into list
-
-
+RecordPtr load_Record(int id, const char* name, const char* program, double marks); // Open file and load data into linked list
+RecordPtr Search_Record(RecordPtr head, int Student_Id); // Looks through the linked list
+void Clear_List(RecordPtr head); // clear the list
 
 //-------------------------------------------------------------------//
 // CMS.c Functions
 int Open_File(const char* file, RecordPtr* head); // Open File function
 void Show_All(RecordPtr head); // Show All function
+void Search_id(RecordPtr head, int Student_ID); // Query Function
 
 #endif

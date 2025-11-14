@@ -7,7 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "CMS.h"
-
+//-----------------------------------------------------------------------//
+// Load Records
 RecordPtr load_Record(int id, const char* name, const char* program, double marks) {
     RecordPtr newNode = malloc(sizeof(Student_records));
     newNode->id = id;
@@ -32,5 +33,18 @@ void Clear_List(RecordPtr head) {
         free(temp->program);
         free(temp);
     }
+}
+//-----------------------------------------------------------------------//
+// Search For student ID
+RecordPtr Search_Record(RecordPtr head, int *Student_ID) {
+    RecordPtr Current = head;
+
+    while (Current != NULL){
+        if (Current->id == Student_ID) {
+            return Current;
+        }
+        Current = Current->next;
+    }
+    return NULL;
 }
 //-----------------------------------------------------------------------//
