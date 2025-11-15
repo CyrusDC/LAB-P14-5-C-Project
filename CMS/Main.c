@@ -78,12 +78,18 @@ int main() {
 	
 	// Variables
 	char command_str[20];
-	char user_id[20];
+	char User_ID[20];
 	char file_name[20] = "P14_5-CMS.txt";
 	char terminal_Name[] = "CMS";
 	int program_running = 1;
 	int Student_ID;
+	char User_Input[256];
+	char args[236] = ""; // var for string of commands
+	char Student_Name[100];
+	char New_Program[100];
+	double New_Marks;
 	RecordPtr head = NULL;
+	int total;
 
 	decleration();
 	printf("Welcome to the Class Management System (CMS)\n");
@@ -91,8 +97,9 @@ int main() {
 	// loop to check for valid user name
 	while (1) {
 		printf("Please enter username:\n");
-		scanf("%s", user_id);
-		if (isValidUserId(user_id)) {
+		fgets(User_ID, sizeof(User_ID), stdin); // reads the whole line including spaces
+		User_ID[strcspn(User_ID, "\n")] = '\0'; // Remove trailing newline if present
+		if (isValidUserId(User_ID)) {
 			break; // valid username, exit loop
 		}
 		else {
@@ -103,8 +110,13 @@ int main() {
 	// Program loop
 	while (program_running) {
 		// input command
-		printf("%s: Please type a Command (Type help to list commands)\n%s: ", terminal_Name, user_id);
-		scanf("%s" ,command_str);
+		printf("%s: Please type a Command (Type help to list commands)\n%s: ", terminal_Name, User_ID);
+		fgets(User_Input, sizeof(User_Input), stdin); // reads the whole line including spaces
+		User_Input[strcspn(User_Input, "\n")] = '\0'; // Remove trailing newline if present
+		
+		//Split into command and arguments
+		sscanf(User_Input, "%s %[^\n]", command_str, args);
+
 
 		// converts the string input to all lower letters
 		for (int i = 0; command_str[i] != '\0'; i++) {
@@ -126,7 +138,12 @@ int main() {
 				}
 				break;
 			case CMD_SAVE:
-				printf("See you later!\n");
+				if (Save_File(file_name, head) == 1) {
+					printf("%s: The database file %s is successfully saved.\n", terminal_Name, file_name);
+				}
+				else {
+					printf("%s: The database file “P1_1-CMS.txt” was not saved.\n", terminal_Name);
+				}
 				break;
 			case CMD_HELP:
 				printf("Options:\n"
@@ -144,21 +161,40 @@ int main() {
 				Show_All(head);
 				break;
 			case CMD_INSERT:
-				printf("Insert\n");
+				if (sscanf(args, "ID=%d Name=\"%99[^\"]\" Programme=\"%99[^\"]\" Mark=%lf", &Student_ID, &Student_Name, &New_Program, &New_Marks) == 4) {
+					Insert_Data(&head, Student_ID, Student_Name, New_Program, New_Marks);
+				}
+				else if (sscanf(args, "ID=%d", &Student_ID) == 1) {
+					check_ID(head, Student_ID);
+				}
+				else {
+					printf("CMS: Invalid INSERT format. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+				}
+
 				break;
 			case CMD_QUERY:
-				printf("Please input Student ID number:\n");
-				scanf("%d", &Student_ID);
-				Search_id(head, Student_ID);
+				if (sscanf(args, "ID=%d", &Student_ID) == 1) {
+					Search_id(head, Student_ID);
+				}
+				else {
+					printf("CMS: Invalid QUERY format. Use: QUERY ID=<id>\n");
+				}
 				break;
 			case CMD_UPDATE:
-				printf("update\n");
+				Update_New(&head, args);
 				break;
 			case CMD_DELETE:
-				printf("delete\n");
+				if (sscanf(args, "ID=%d", &Student_ID) == 1) {
+					Delete_Record(&head, Student_ID);
+				}
+				else {
+					printf("CMS: Invalid DELETE format. Use: DELETE ID=<id>\n");
+				}
 				break;
 			case CMD_EXIT:
 				printf("Exiting CMS.....\n");
+				Clear_List(head);
+				head = NULL;
 				program_running = 0;
 				break;
 			case CMD_UNKNOWN:

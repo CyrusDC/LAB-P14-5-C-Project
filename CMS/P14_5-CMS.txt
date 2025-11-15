@@ -1,9 +1,11 @@
-Database Name: Student-Records-CMS
+Database: Student-Records-CMS
 Authors: Cyrus Del Carmen
 
-Table Name: StudentRecords
-ID	Name		Programme		Mark
-2301234	Joshua Chen	Software Engineering	70.5
-2201234	Isaac Teo	Computer Science	63.4
-2304567	John Levoy	Digital Supply Chain	85.9
-2501172 Cyrus Del	Computer Engineering	25.6
+Table: StudentRecords
+ID	Name			Programme		Mark
+2301234	Joshua Chen		Software Engineering	70.5
+2201234	Isaac Teo		Computer Science	63.4
+2304567	John Levoy		Digital Supply Chain	85.9
+2501172	Cyrus Del C		Computer Engineering	75.3
+2501234	Hong Lee		Mechanical Engineering	95.2
+2401234	Michelle Lee		Information Security	73.2

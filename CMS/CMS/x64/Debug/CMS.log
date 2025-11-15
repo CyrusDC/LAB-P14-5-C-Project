@@ -1,6 +1,28 @@
-﻿  Main.c
+﻿  CMS.c
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(35,8): warning C4013: 'strncmp' undefined; assuming extern returning int
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(39,8): warning C4013: 'strlen' undefined; assuming extern returning int
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(65,43): warning C4028: formal parameter 2 different from declaration
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(114,29): warning C4028: formal parameter 1 different from declaration
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(115,22): warning C4047: 'function': 'int *' differs in levels of indirection from 'int'
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(115,22): warning C4024: 'check_ID': different types for formal and actual parameter 2
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(123,34): warning C4028: formal parameter 2 different from declaration
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(175,31): warning C4028: formal parameter 1 different from declaration
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(175,41): warning C4028: formal parameter 2 different from declaration
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(184,11): warning C4013: 'strcspn' undefined; assuming extern returning int
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\CMS.c(185,6): warning C4013: 'strcmp' undefined; assuming extern returning int
+  Main.c
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(141,30): warning C4047: 'function': 'RecordPtr *' differs in levels of indirection from 'RecordPtr'
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(141,30): warning C4024: 'Save_File': different types for formal and actual parameter 2
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(165,18): warning C4047: 'function': 'RecordPtr' differs in levels of indirection from 'RecordPtr *'
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(165,18): warning C4024: 'Insert_Data': different types for formal and actual parameter 1
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(168,21): warning C4047: 'function': 'int *' differs in levels of indirection from 'int'
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(168,21): warning C4024: 'check_ID': different types for formal and actual parameter 2
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(188,20): warning C4047: 'function': 'RecordPtr' differs in levels of indirection from 'RecordPtr *'
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(188,20): warning C4024: 'Delete_Record': different types for formal and actual parameter 1
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(188,27): warning C4047: 'function': 'int *' differs in levels of indirection from 'int'
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(188,27): warning C4024: 'Delete_Record': different types for formal and actual parameter 2
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(92,6): warning C4101: 'total': unreferenced local variable
   Storage.c
-B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Storage.c(39,46): warning C4028: formal parameter 2 different from declaration
-B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Storage.c(43,25): warning C4047: '==': 'int' differs in levels of indirection from 'int *'
   Generating Code...
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Storage.c(118,1): warning C4715: 'Delete_Node': not all control paths return a value
   CMS.vcxproj -> B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\x64\Debug\CMS.exe
