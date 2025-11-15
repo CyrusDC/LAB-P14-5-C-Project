@@ -23,17 +23,35 @@ typedef enum {
 	CMD_UNKNOWN
 } CommandType;
 
-// map the constant commmands to a input string
+// create the constant commmands to a input string
 static CommandType getCommandType(const char* command) { 
-	if (strcmp(command, "open") == 0) return CMD_OPEN;
-	if (strcmp(command, "save") == 0) return CMD_SAVE;
-	if (strcmp(command, "help") == 0) return CMD_HELP;
-	if (strcmp(command, "showall") == 0) return CMD_SHOWALL;
-	if (strcmp(command, "insert") == 0) return CMD_INSERT;
-	if (strcmp(command, "query") == 0) return CMD_QUERY;
-	if (strcmp(command, "update") == 0) return CMD_UPDATE;
-	if (strcmp(command, "delete") == 0) return CMD_DELETE;
-	if (strcmp(command, "exit") == 0) return CMD_EXIT;
+	if (strcmp(command, "open") == 0) {
+		return CMD_OPEN;
+	}
+	else if (strcmp(command, "save") == 0) {
+		return CMD_SAVE;
+	}
+	else if (strcmp(command, "help") == 0) {
+		return CMD_HELP;
+	}
+	else if (strcmp(command, "showall") == 0) {
+		return CMD_SHOWALL;
+	}
+	else if (strcmp(command, "insert") == 0) {
+		return CMD_INSERT;
+	}
+	else if (strcmp(command, "query") == 0) {
+		return CMD_QUERY;
+	}
+	else if (strcmp(command, "update") == 0) {
+		return CMD_UPDATE;
+	}
+	else if (strcmp(command, "delete") == 0) {
+		return CMD_DELETE;
+	}
+	else if (strcmp(command, "exit") == 0) {
+		return CMD_EXIT;
+	}
 	return CMD_UNKNOWN;
 }
 
@@ -65,11 +83,11 @@ void decleration() {
 	"• We agree that we did not copy any code directly from AI generated sources.\n"
 	"Declared by: Group Name (please insert your group name)\n"
 	"Team members:\n"
-	"1. XXX\n"
-	"2. XXX\n"
-	"3. XXX\n"
-	"4. XXX\n"
-	"5. XXX\n\n"
+	"1. Nasyirah Binte Mohd Shariff (2503665)\n"
+	"2. Siew Wee Kiam Eugene (2502012)\n"
+	"3. Del Carmen Cyrus Aldwin Haboc (2501172)\n"
+	"4. Lim Jun Wei (2501117)\n"
+	"5. Muhamad Akid Qusyairi Bin Muhamad Riduan (2500882)\n\n"
 	"Date: (please insert the date when you submit your group project).\n\n"
 	);
 }

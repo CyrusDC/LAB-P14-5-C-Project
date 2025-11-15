@@ -193,10 +193,6 @@ void Delete_Record(RecordPtr *head, int Student_ID) {
 	}
 }
 //-------------------------------------------------------------------//
-
-
-
-
 int Count_Nodes(RecordPtr head) {
 	int count = 0;
 	RecordPtr current = head;

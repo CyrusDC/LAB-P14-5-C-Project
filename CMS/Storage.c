@@ -114,6 +114,6 @@ RecordPtr Delete_Node(RecordPtr head, int Target_ID) {
         prev = current;
         current = current->next;
     }
-
+    return head;
 }
 //-----------------------------------------------------------------------//
