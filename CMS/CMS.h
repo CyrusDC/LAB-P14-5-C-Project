@@ -32,6 +32,4 @@ int check_ID(RecordPtr head, int New_ID); // Check if ID exists
 void Delete_Record(RecordPtr* head, int Student_ID); // Delete Function
 int Save_File(const char* file, RecordPtr head); // Save Function
 void Update_New(RecordPtr* head, const char* args); // Update function
-
-int Count_Nodes(RecordPtr head);
 #endif

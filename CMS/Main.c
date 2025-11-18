@@ -22,22 +22,41 @@ typedef enum {
 	CMD_UNKNOWN
 } CommandType;
 
-// map the constant commmands to a input string
+// map the commmands to an input string
 static CommandType getCommandType(const char* command) {
-	if (strcmp(command, "open") == 0) return CMD_OPEN;
-	if (strcmp(command, "save") == 0) return CMD_SAVE;
-	if (strcmp(command, "help") == 0) return CMD_HELP;
-	if (strcmp(command, "showall") == 0) return CMD_SHOWALL;
-	if (strcmp(command, "insert") == 0) return CMD_INSERT;
-	if (strcmp(command, "query") == 0) return CMD_QUERY;
-	if (strcmp(command, "update") == 0) return CMD_UPDATE;
-	if (strcmp(command, "delete") == 0) return CMD_DELETE;
-	if (strcmp(command, "exit") == 0) return CMD_EXIT;
+	if (strcmp(command, "open") == 0) {
+		return CMD_OPEN;
+	}
+	else if (strcmp(command, "save") == 0) {
+		return CMD_SAVE;
+	}
+	else if (strcmp(command, "help") == 0) {
+		return CMD_HELP;
+	}
+	else if (strcmp(command, "showall") == 0) {
+		return CMD_SHOWALL;
+	}
+	else if (strcmp(command, "insert") == 0) {
+		return CMD_INSERT;
+	}
+	else if (strcmp(command, "query") == 0) {
+		return CMD_QUERY;
+	}
+	else if (strcmp(command, "update") == 0) {
+		return CMD_UPDATE;
+	}
+	else if (strcmp(command, "delete") == 0) {
+		return CMD_DELETE;
+	}
+	else if (strcmp(command, "exit") == 0) {
+		return CMD_EXIT;
+	}
 	return CMD_UNKNOWN;
 }
 
+
 // User name validation
-static int isValidUserId(const char* id) {
+static int Valid_User_Id(const char* id) {
 	if (id[0] == '\0') return 0;  // reject empty string
 
 	for (int i = 0; id[i] != '\0'; i++) {
@@ -56,13 +75,13 @@ void decleration() {
 		"not accessible by others. Where such plagiarism is detected, both of the assessments involved will\n"
 		"receive ZERO mark.\n\n"
 		"We hereby declare that:\n"
-		"• We fully understand and agree to the abovementioned plagiarism policy.\n"
-		"• We did not copy any code from others or from other places.\n"
-		"• We did not share our codes with others or upload to any other places for public access and will do that in the future.\n"
-		"• We agree that our project will receive Zero mark if there is any plagiarism detected.\n"
-		"• We agree that we will not disclose any information or material of the group project to others or upload to any other places for public access.\n"
-		"• We agree that we did not copy any code directly from AI generated sources.\n"
-		"Declared by: Group Name (please insert your group name)\n"
+		"- We fully understand and agree to the abovementioned plagiarism policy.\n"
+		"- We did not copy any code from others or from other places.\n"
+		"- We did not share our codes with others or upload to any other places for public access and will do that in the future.\n"
+		"- We agree that our project will receive Zero mark if there is any plagiarism detected.\n"
+		"- We agree that we will not disclose any information or material of the group project to others or upload to any other places for public access.\n"
+		"- We agree that we did not copy any code directly from AI generated sources.\n"
+		"Declared by: P14-5\n"
 		"Team members:\n"
 		"1. Nasyirah Binte Mohd Shariff (2503665)\n"
 		"2. Siew Wee Kiam Eugene (2502012)\n"
@@ -73,48 +92,88 @@ void decleration() {
 	);
 }
 
-static int parse_insert_args(const char* args, int* out_id, char* out_name, size_t name_sz, char* out_prog, size_t prog_sz, double* out_mark) {
-	const char* p, * q;
-	size_t len, end;
+// Function to parse insert command args
+static int Parse_Insert_Args(const char* args,int* Output_ID,char* Output_Name, size_t Name_Size,char* Output_Program, size_t Program_Size,double* Output_Mark)
+{
+	const char* start;
+	const char* end;
+	size_t length;
 
-	// ID
-	p = strstr(args, "ID=");
-	if (!p || sscanf(p, "ID=%d", out_id) != 1) return 0;
+	// Check for valid id
+	start = strstr(args, "ID=");
+	if (start == NULL || sscanf(start, "ID=%d", Output_ID) != 1) {
+		return 0;   // couldn't find ID or invalid number
+	}
 
-	// Name (text between "Name=" and "Programme=")
-	p = strstr(args, "Name=");
-	q = strstr(args, "Programme=");
-	if (!p || !q || q <= p) return 0;
-	p += strlen("Name=");
-	len = (size_t)(q - p);
+	// Check for name
+	start = strstr(args, "Name=");
+	end = strstr(args, "Programme=");
+
+	if (start == NULL || end == NULL || end <= start) {
+		return 0;   // wrong format or missing fields
+	}
+
+	start += strlen("Name=");
+	length = (size_t)(end - start);
+
 	// trim leading spaces
-	while (len > 0 && isspace((unsigned char)*p)) { p++; len--; }
+	while (length > 0 && isspace((unsigned char)*start)) {
+		start++;
+		length--;
+	}
+
 	// trim trailing spaces
-	end = len;
-	while (end > 0 && isspace((unsigned char)p[end - 1])) end--;
-	if (end >= name_sz) end = name_sz - 1;
-	memcpy(out_name, p, end);
-	out_name[end] = '\0';
+	while (length > 0 && isspace((unsigned char)start[length - 1])) {
+		length--;
+	}
 
-	// Programme (text between "Programme=" and "Mark=")
-	p = strstr(args, "Programme=");
-	q = strstr(args, "Mark=");
-	if (!p || !q || q <= p) return 0;
-	p += strlen("Programme=");
-	len = (size_t)(q - p);
-	while (len > 0 && isspace((unsigned char)*p)) { p++; len--; }
-	end = len;
-	while (end > 0 && isspace((unsigned char)p[end - 1])) end--;
-	if (end >= prog_sz) end = prog_sz - 1;
-	memcpy(out_prog, p, end);
-	out_prog[end] = '\0';
+	if (length >= Name_Size) {
+		length = Name_Size - 1;
+	}
 
-	// Mark
-	p = strstr(args, "Mark=");
-	if (!p || sscanf(p, "Mark=%lf", out_mark) != 1) return 0;
+	strncpy(Output_Name, start, length);
+	Output_Name[length] = '\0';
 
-	return 1;
+
+	// Check for Programme
+	start = strstr(args, "Programme=");
+	end = strstr(args, "Mark=");
+
+	if (start == NULL || end == NULL || end <= start) {
+		return 0;
+	}
+
+	start += strlen("Programme=");
+	length = (size_t)(end - start);
+
+	// trim leading spaces
+	while (length > 0 && isspace((unsigned char)*start)) {
+		start++;
+		length--;
+	}
+
+	// trim trailing spaces
+	while (length > 0 && isspace((unsigned char)start[length - 1])) {
+		length--;
+	}
+
+	if (length >= Program_Size) {
+		length = Program_Size - 1;
+	}
+
+	strncpy(Output_Program, start, length);
+	Output_Program[length] = '\0';
+
+
+	// Check for marks
+	start = strstr(args, "Mark=");
+	if (start == NULL || sscanf(start, "Mark=%lf", Output_Mark) != 1) {
+		return 0;
+	}
+
+	return 1;   // successfully parsed all fields
 }
+
 
 int main() {
 
@@ -141,7 +200,7 @@ int main() {
 		printf("Please enter username:\n");
 		fgets(User_ID, sizeof(User_ID), stdin); // reads the whole line including spaces
 		User_ID[strcspn(User_ID, "\n")] = '\0'; // Remove trailing newline if present
-		if (isValidUserId(User_ID)) {
+		if (Valid_User_Id(User_ID)) {
 			break; // valid username, exit loop
 		}
 		else {
@@ -184,16 +243,17 @@ int main() {
 				printf("%s: The database file %s is successfully saved.\n", terminal_Name, file_name);
 			}
 			else {
-				printf("%s: The database file “P1_1-CMS.txt” was not saved.\n", terminal_Name);
+				printf("%s: The database file %s was not saved.\n", terminal_Name, file_name);
 			}
 			break;
 		case CMD_SHOWALL:
 			Show_All(head);
 			break;
 		case CMD_INSERT:
-			if (parse_insert_args(args, &Student_ID, Student_Name, sizeof(Student_Name), New_Program, sizeof(New_Program), &New_Marks)) {
+			if (Parse_Insert_Args(args, &Student_ID, Student_Name, sizeof(Student_Name), New_Program, sizeof(New_Program), &New_Marks)) {
 				Insert_Data(&head, Student_ID, Student_Name, New_Program, New_Marks);
 			}
+			// checks if only ID was typed
 			else if (sscanf(args, "ID=%d", &Student_ID) == 1) {
 				if (check_ID(head, Student_ID)) {
 					printf("CMS: The record with ID=%d already exists.\n", Student_ID);

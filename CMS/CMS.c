@@ -74,7 +74,12 @@ int Save_File(const char* file, RecordPtr head) {
 	}
 	else {
 		fprintf(fh_output, "Database: Student-Records-CMS\n");
-		fprintf(fh_output, "Authors: Cyrus Del Carmen\n\n");
+		fprintf(fh_output, "Authors: Cyrus Del Carmen,\n"
+							"Nasyirah Binte Mohd Shariff,\n"
+							"Siew Wee Kiam Eugene,\n"
+							"Lim Jun Wei,\n"
+							"Muhamad Akid Qusyairi Bin Muhamad Riduan\n\n"
+		);
 		fprintf(fh_output, "Table: StudentRecords\n");
 		fprintf(fh_output, "%s\t%s\t\t\t%s\t\t%s\n", "ID", "Name", "Programme", "Mark");
 
@@ -154,50 +159,46 @@ void Search_id(RecordPtr head, int Student_ID) {
 }
 //-------------------------------------------------------------------//
 // UPDATE helper: parse update args
-static int parse_update_args(const char* args, int* Output_ID, int* Output_Mark, double* New_Mark, int* Output_Program, char* New_Program, size_t Program_size) {
-	const char* p;
-	// ID required
-	p = strstr(args, "ID=");
-	if (!p || sscanf(p, "ID=%d", Output_ID) != 1) return 0;
-
+static int Parse_Update_Args(const char* args, int* Output_ID, int* Output_Mark, double* New_Mark, int* Output_Program, char* New_Program, size_t Program_size) {
+	const char* Start_Str;
+	const char* End_Str = NULL;
 	*Output_Mark = 0;
 	*Output_Program = 0;
 
-	// Mark (optional)
-	p = strstr(args, "Mark=");
-	if (p) {
-		if (sscanf(p, "Mark=%lf", New_Mark) == 1) {
+	// Must have input ID
+	Start_Str = strstr(args, "ID=");
+	if (!Start_Str || sscanf(Start_Str, "ID=%d", Output_ID) != 1) {
+		return 0;
+	}
+
+	// Marks are optional
+	Start_Str = strstr(args, "Mark=");
+	if (Start_Str) {
+		if (sscanf(Start_Str, "Mark=%lf", New_Mark) == 1) {
 			*Output_Mark = 1;
 		}
 	}
 
-	// Programme (optional) - accept quoted or unquoted value
-	p = strstr(args, "Programme=");
-	if (p) {
-		p += strlen("Programme=");
+	// Look for Programme input. can accept quoted or unquoted value
+	Start_Str = strstr(args, "Programme=");
+	if (Start_Str) {
+		Start_Str += strlen("Programme=");
 		// skip leading spaces
-		while (*p && isspace((unsigned char)*p)) p++;
-
-		const char* q = NULL;
+		while (*Start_Str && isspace((unsigned char)*Start_Str)) {
+			Start_Str++;
+		}
 		size_t len = 0;
-		if (*p == '"') {
-			// quoted value
-			p++; // skip opening quote
-			q = strchr(p, '"');
-			len = q ? (size_t)(q - p) : strlen(p);
-		}
-		else {
-			// unquoted: read up to next field marker ("Mark=") or end
-			q = strstr(p, "Mark=");
-			len = q ? (size_t)(q - p) : strlen(p);
-		}
+		// continue to read until the next field or end of the string
+		End_Str = strstr(Start_Str, "Mark=");
+		len = End_Str ? (size_t)(End_Str - Start_Str) : strlen(Start_Str);
 
-		// trim trailing spaces
-		while (len > 0 && isspace((unsigned char)p[len - 1])) len--;
-
+		// trim trailing spaces and copy into new program
+		while (len > 0 && isspace((unsigned char)Start_Str[len - 1])) {
+			len--;
+		}
 		if (len >= Program_size) len = Program_size - 1;
 		if (len > 0) {
-			memcpy(New_Program, p, len);
+			memcpy(New_Program, Start_Str, len);
 		}
 		New_Program[len] = '\0';
 		*Output_Program = 1;
@@ -212,7 +213,7 @@ static int parse_update_args(const char* args, int* Output_ID, int* Output_Mark,
 // UPDATE Function
 void Update_New(RecordPtr* head, const char* args) {
 
-	if (!parse_update_args(args, &id, &Output_Mark, &marks, &Output_Program, program, sizeof(program))) {
+	if (!Parse_Update_Args(args, &id, &Output_Mark, &marks, &Output_Program, program, sizeof(program))) {
 		printf("CMS: Invalid UPDATE format. Use: UPDATE ID=<id> Mark=<marks> or Programme=<programme>\n");
 		return;
 	}

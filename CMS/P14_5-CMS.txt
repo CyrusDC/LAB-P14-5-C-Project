@@ -1,5 +1,9 @@
 Database: Student-Records-CMS
-Authors: Cyrus Del Carmen
+Authors: Cyrus Del Carmen,
+Nasyirah Binte Mohd Shariff,
+Siew Wee Kiam Eugene,
+Lim Jun Wei,
+Muhamad Akid Qusyairi Bin Muhamad Riduan
 
 Table: StudentRecords
 ID	Name			Programme		Mark
@@ -7,4 +11,4 @@ ID	Name			Programme		Mark
 2304567	John Levoy		Digital Supply Chain	85.9
 2501172	Cyrus Del C		Computer Engineering	75.3
 2501234	Hong Lee		Mechanical Engineering	95.2
-2401234	Michelle Lee		Applied AI	73.2
+2401234	Michelle Lee		Computer Science	75.2

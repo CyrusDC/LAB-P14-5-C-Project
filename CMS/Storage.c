@@ -12,12 +12,13 @@
 RecordPtr load_Record(int id, const char* name, const char* program, double marks) {
     RecordPtr newNode = malloc(sizeof(Student_records));
     newNode->id = id;
+
     // creates a deep copy of the node if not done the output will be garbage
     newNode->name = malloc(strlen(name) + 1);
     strcpy(newNode->name, name);
     newNode->program = malloc(strlen(program) + 1);
     strcpy(newNode->program, program);
-    // --------------------------------------------------------//
+
     newNode->marks = marks;
     newNode->next = NULL;
     return newNode;
@@ -61,6 +62,7 @@ RecordPtr Insert_Tail(RecordPtr head, int New_ID, const char* Student_Name, cons
 }
 //-----------------------------------------------------------------------//
 // Update a record based on ID number
+// Update marks of a student
 RecordPtr Update_Node_Marks(RecordPtr head, int ID, double New_Marks) {
     RecordPtr Current = head;
     while (Current != NULL) {
@@ -74,6 +76,7 @@ RecordPtr Update_Node_Marks(RecordPtr head, int ID, double New_Marks) {
     printf("CMS: The record with ID=%d does not exist.\n", ID);
     return head;
 }
+// Update program of a student
 RecordPtr Update_Node_Program(RecordPtr head, int ID, const char* New_Program) {
     RecordPtr Current = head;
     while (Current != NULL) {
