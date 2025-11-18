@@ -37,7 +37,7 @@ void Clear_List(RecordPtr head) {
 // Search For student ID
 RecordPtr Search_Record(RecordPtr head, int Student_ID) {
     RecordPtr Current = head;
-    while (Current != NULL){
+    while (Current != NULL) {
         if (Current->id == Student_ID) {
             return Current;
         }
@@ -51,13 +51,13 @@ RecordPtr Insert_Tail(RecordPtr head, int New_ID, const char* Student_Name, cons
     RecordPtr newNode = load_Record(New_ID, Student_Name, New_Program, New_Marks);
     if (head == NULL) {
         return newNode; // If the list is empty, return the new node as the head
-	}
+    }
     RecordPtr current = head;
     while (current->next != NULL) {
         current = current->next; // Traverse to the last node
     }
     current->next = newNode; // Link the new node at the end
-	return head; // Return the head of the list
+    return head; // Return the head of the list
 }
 //-----------------------------------------------------------------------//
 // Update a record based on ID number
@@ -87,7 +87,7 @@ RecordPtr Update_Node_Program(RecordPtr head, int ID, const char* New_Program) {
         Current = Current->next;
     }
     printf("CMS: The record with ID=%d does not exist.\n", ID);
-	return head;
+    return head;
 }
 //-----------------------------------------------------------------------//
 // Delete Record based on student ID
@@ -114,6 +114,6 @@ RecordPtr Delete_Node(RecordPtr head, int Target_ID) {
         prev = current;
         current = current->next;
     }
-    return head;
+
 }
 //-----------------------------------------------------------------------//

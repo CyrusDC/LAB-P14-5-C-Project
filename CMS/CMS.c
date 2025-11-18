@@ -1,4 +1,3 @@
-
 // This file will handle all the functions such as OPEN, SAVE, SHOWALL, INSERT, QUERY, UPDATE and DELETE
 
 // Include libraries
@@ -6,6 +5,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include "CMS.h"
 
 // Global Variables
@@ -15,15 +16,18 @@ char name[100];
 char program[100];
 double marks;
 char User_Ans[4];
+int Output_Mark = 0;
+int Output_Program = 0;
 
 // Headers for output
 void header_output() {
+	// Use fixed width columns: ID (8), Name (20), Programme (25), Mark (5 with 1 decimal)
 	printf("CMS: Here are all the records found in the table \"StudentRecords\".\n");
-	printf("ID          Name                  Programme                  Mark\n");
+	printf("%-8s  %-20s  %-25s  %5s\n", "ID", "Name", "Programme", "Mark");
 }
 //-------------------------------------------------------------------//
 // OPEN Function
-int Open_File(const char *file, RecordPtr* head) {
+int Open_File(const char* file, RecordPtr* head) {
 	FILE* fh_output;
 	fh_output = fopen(file, "r");
 	if (fh_output == NULL) {
@@ -42,12 +46,12 @@ int Open_File(const char *file, RecordPtr* head) {
 			if (sscanf(buffer, "%d %[^\t] %[^\t] %lf", &id, name, program, &marks) == 4) {
 				RecordPtr node = load_Record(id, name, program, marks);
 				if (node) {
-					if(*head == NULL) {
+					if (*head == NULL) {
 						*head = node; // Assigns node as the head
 					}
 					else { // if head is not empty loop through the list until you reach the tail and insert the node
 						RecordPtr current = *head;
-						while (current->next != NULL) { 
+						while (current->next != NULL) {
 							current = current->next;
 						}
 						current->next = node;
@@ -72,7 +76,7 @@ int Save_File(const char* file, RecordPtr head) {
 		fprintf(fh_output, "Database: Student-Records-CMS\n");
 		fprintf(fh_output, "Authors: Cyrus Del Carmen\n\n");
 		fprintf(fh_output, "Table: StudentRecords\n");
-		fprintf(fh_output, "%s\t%s\t\t\t%s\t\t%s\n","ID", "Name", "Programme", "Mark");
+		fprintf(fh_output, "%s\t%s\t\t\t%s\t\t%s\n", "ID", "Name", "Programme", "Mark");
 
 		RecordPtr current = head;
 		while (current != NULL) {
@@ -100,7 +104,8 @@ void Show_All(RecordPtr head) {
 	else {
 		header_output();
 		while (current != NULL) {
-			printf("%-10d  %-20s  %-25s  %.1f\n",
+			// Print using fixed column widths
+			printf("%-8d  %-20s  %-25s  %5.1f\n",
 				current->id,
 				current->name,
 				current->program,
@@ -117,20 +122,18 @@ void Insert_Data(RecordPtr* head, int New_ID, const char* Student_Name, const ch
 		return;
 	}
 	*head = Insert_Tail(*head, New_ID, Student_Name, New_Program, New_Marks);
-	printf("A new record with ID=%d is successfully inserted.\n", New_ID);
+	printf("CMS: A new record with ID=%d is successfully inserted.\n", New_ID);
 
 }
 int check_ID(RecordPtr head, int New_ID) {
 	RecordPtr current = head;
 	while (current != NULL) {
 		if (current->id == New_ID) {
-			printf("CMS: The record with ID=%d already exists.\n", New_ID);
-			return 1;
+			return 1; // found
 		}
 		current = current->next;
 	}
-	printf("CMS: The record with ID=%d does not exist.\n", New_ID);
-	return -1;
+	return 0; // not found
 }
 //-------------------------------------------------------------------//
 // QUERY Function
@@ -138,8 +141,8 @@ void Search_id(RecordPtr head, int Student_ID) {
 	RecordPtr found = Search_Record(head, Student_ID);
 	if (found != NULL) {
 		printf("CMS: The record with ID=%d is found in the data table.\n", Student_ID);
-		printf("ID        Name                Programme               Mark\n");
-		printf("%-8d  %-18s  %-22s  %.1f\n",
+		printf("%-8s  %-20s  %-25s  %5s\n", "ID", "Name", "Programme", "Mark");
+		printf("%-8d  %-20s  %-25s  %5.1f\n",
 			found->id,
 			found->name,
 			found->program,
@@ -150,29 +153,83 @@ void Search_id(RecordPtr head, int Student_ID) {
 	}
 }
 //-------------------------------------------------------------------//
+// UPDATE helper: parse update args
+static int parse_update_args(const char* args, int* Output_ID, int* Output_Mark, double* New_Mark, int* Output_Program, char* New_Program, size_t Program_size) {
+	const char* p;
+	// ID required
+	p = strstr(args, "ID=");
+	if (!p || sscanf(p, "ID=%d", Output_ID) != 1) return 0;
+
+	*Output_Mark = 0;
+	*Output_Program = 0;
+
+	// Mark (optional)
+	p = strstr(args, "Mark=");
+	if (p) {
+		if (sscanf(p, "Mark=%lf", New_Mark) == 1) {
+			*Output_Mark = 1;
+		}
+	}
+
+	// Programme (optional) - accept quoted or unquoted value
+	p = strstr(args, "Programme=");
+	if (p) {
+		p += strlen("Programme=");
+		// skip leading spaces
+		while (*p && isspace((unsigned char)*p)) p++;
+
+		const char* q = NULL;
+		size_t len = 0;
+		if (*p == '"') {
+			// quoted value
+			p++; // skip opening quote
+			q = strchr(p, '"');
+			len = q ? (size_t)(q - p) : strlen(p);
+		}
+		else {
+			// unquoted: read up to next field marker ("Mark=") or end
+			q = strstr(p, "Mark=");
+			len = q ? (size_t)(q - p) : strlen(p);
+		}
+
+		// trim trailing spaces
+		while (len > 0 && isspace((unsigned char)p[len - 1])) len--;
+
+		if (len >= Program_size) len = Program_size - 1;
+		if (len > 0) {
+			memcpy(New_Program, p, len);
+		}
+		New_Program[len] = '\0';
+		*Output_Program = 1;
+	}
+
+	// At least one of mark or programme must be present for a valid update
+	if (!*Output_Mark && !*Output_Program) return 0;
+
+	return 1;
+}
+
 // UPDATE Function
-void Update_New(RecordPtr *head, const char* args) {
-	// Case 1: Update marks
-	if (sscanf(args, "ID=%d Mark=%lf", &id, &marks) == 2) {
-		*head = Update_Node_Marks(*head, id, marks);
+void Update_New(RecordPtr* head, const char* args) {
+
+	if (!parse_update_args(args, &id, &Output_Mark, &marks, &Output_Program, program, sizeof(program))) {
+		printf("CMS: Invalid UPDATE format. Use: UPDATE ID=<id> Mark=<marks> or Programme=<programme>\n");
 		return;
 	}
 
-	// Case 2: Update programme
-	else if (sscanf(args, "ID=%d Programme=\"%99[^\"]\"", &id, program) == 2) {
+	// If programme requested, update it first
+	if (Output_Program) {
 		*head = Update_Node_Program(*head, id, program);
-		return;
 	}
 
-	// Case 3: Invalid format
-	else {
-		printf("CMS: Invalid UPDATE format. Use: UPDATE ID=<id> Mark=<marks> or Programme=\"<programme>\"\n");
+	// If mark requested, update it
+	if (Output_Mark) {
+		*head = Update_Node_Marks(*head, id, marks);
 	}
-
 }
 //-------------------------------------------------------------------//
 // DELETE Function
-void Delete_Record(RecordPtr *head, int Student_ID) {
+void Delete_Record(RecordPtr* head, int Student_ID) {
 	// Use Search_Record to check existence
 	RecordPtr found = Search_Record(*head, Student_ID);
 	if (found == NULL) {
@@ -193,14 +250,4 @@ void Delete_Record(RecordPtr *head, int Student_ID) {
 	}
 }
 //-------------------------------------------------------------------//
-int Count_Nodes(RecordPtr head) {
-	int count = 0;
-	RecordPtr current = head;
 
-	while (current != NULL) {
-		count++;
-		current = current->next;
-	}
-
-	return count;
-}

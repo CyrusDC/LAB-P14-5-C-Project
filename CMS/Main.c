@@ -1,4 +1,3 @@
-
 // This File will handle the user input and deal with any weird user inputs
 
 // Include Libraries
@@ -23,35 +22,17 @@ typedef enum {
 	CMD_UNKNOWN
 } CommandType;
 
-// create the constant commmands to a input string
-static CommandType getCommandType(const char* command) { 
-	if (strcmp(command, "open") == 0) {
-		return CMD_OPEN;
-	}
-	else if (strcmp(command, "save") == 0) {
-		return CMD_SAVE;
-	}
-	else if (strcmp(command, "help") == 0) {
-		return CMD_HELP;
-	}
-	else if (strcmp(command, "showall") == 0) {
-		return CMD_SHOWALL;
-	}
-	else if (strcmp(command, "insert") == 0) {
-		return CMD_INSERT;
-	}
-	else if (strcmp(command, "query") == 0) {
-		return CMD_QUERY;
-	}
-	else if (strcmp(command, "update") == 0) {
-		return CMD_UPDATE;
-	}
-	else if (strcmp(command, "delete") == 0) {
-		return CMD_DELETE;
-	}
-	else if (strcmp(command, "exit") == 0) {
-		return CMD_EXIT;
-	}
+// map the constant commmands to a input string
+static CommandType getCommandType(const char* command) {
+	if (strcmp(command, "open") == 0) return CMD_OPEN;
+	if (strcmp(command, "save") == 0) return CMD_SAVE;
+	if (strcmp(command, "help") == 0) return CMD_HELP;
+	if (strcmp(command, "showall") == 0) return CMD_SHOWALL;
+	if (strcmp(command, "insert") == 0) return CMD_INSERT;
+	if (strcmp(command, "query") == 0) return CMD_QUERY;
+	if (strcmp(command, "update") == 0) return CMD_UPDATE;
+	if (strcmp(command, "delete") == 0) return CMD_DELETE;
+	if (strcmp(command, "exit") == 0) return CMD_EXIT;
 	return CMD_UNKNOWN;
 }
 
@@ -69,31 +50,74 @@ static int isValidUserId(const char* id) {
 
 void decleration() {
 	printf("Declaration\n"
-	"SIT’s policy on copying does not allow the students to copy source code as well as assessment solutions\n"
-	"from another person AI or other places. It is the students’ responsibility to guarantee that their\n"
-	"assessment solutions are their own work. Meanwhile, the students must also ensure that their work is\n"
-	"not accessible by others. Where such plagiarism is detected, both of the assessments involved will\n"
-	"receive ZERO mark.\n\n"
-	"We hereby declare that:\n"
-	"• We fully understand and agree to the abovementioned plagiarism policy.\n"
-	"• We did not copy any code from others or from other places.\n"
-	"• We did not share our codes with others or upload to any other places for public access and will do that in the future.\n"
-	"• We agree that our project will receive Zero mark if there is any plagiarism detected.\n"
-	"• We agree that we will not disclose any information or material of the group project to others or upload to any other places for public access.\n"
-	"• We agree that we did not copy any code directly from AI generated sources.\n"
-	"Declared by: Group Name (please insert your group name)\n"
-	"Team members:\n"
-	"1. Nasyirah Binte Mohd Shariff (2503665)\n"
-	"2. Siew Wee Kiam Eugene (2502012)\n"
-	"3. Del Carmen Cyrus Aldwin Haboc (2501172)\n"
-	"4. Lim Jun Wei (2501117)\n"
-	"5. Muhamad Akid Qusyairi Bin Muhamad Riduan (2500882)\n\n"
-	"Date: (please insert the date when you submit your group project).\n\n"
+		"SIT’s policy on copying does not allow the students to copy source code as well as assessment solutions\n"
+		"from another person AI or other places. It is the students’ responsibility to guarantee that their\n"
+		"assessment solutions are their own work. Meanwhile, the students must also ensure that their work is\n"
+		"not accessible by others. Where such plagiarism is detected, both of the assessments involved will\n"
+		"receive ZERO mark.\n\n"
+		"We hereby declare that:\n"
+		"• We fully understand and agree to the abovementioned plagiarism policy.\n"
+		"• We did not copy any code from others or from other places.\n"
+		"• We did not share our codes with others or upload to any other places for public access and will do that in the future.\n"
+		"• We agree that our project will receive Zero mark if there is any plagiarism detected.\n"
+		"• We agree that we will not disclose any information or material of the group project to others or upload to any other places for public access.\n"
+		"• We agree that we did not copy any code directly from AI generated sources.\n"
+		"Declared by: Group Name (please insert your group name)\n"
+		"Team members:\n"
+		"1. Nasyirah Binte Mohd Shariff (2503665)\n"
+		"2. Siew Wee Kiam Eugene (2502012)\n"
+		"3. Del Carmen Cyrus Aldwin Haboc (2501172)\n"
+		"4. Lim Jun Wei (2501117)\n"
+		"5. Muhamad Akid Qusyairi Bin Muhamad Riduan (2500882)\n\n"
+		"Date: 23 November 2025.\n\n"
 	);
 }
 
+static int parse_insert_args(const char* args, int* out_id, char* out_name, size_t name_sz, char* out_prog, size_t prog_sz, double* out_mark) {
+	const char* p, * q;
+	size_t len, end;
+
+	// ID
+	p = strstr(args, "ID=");
+	if (!p || sscanf(p, "ID=%d", out_id) != 1) return 0;
+
+	// Name (text between "Name=" and "Programme=")
+	p = strstr(args, "Name=");
+	q = strstr(args, "Programme=");
+	if (!p || !q || q <= p) return 0;
+	p += strlen("Name=");
+	len = (size_t)(q - p);
+	// trim leading spaces
+	while (len > 0 && isspace((unsigned char)*p)) { p++; len--; }
+	// trim trailing spaces
+	end = len;
+	while (end > 0 && isspace((unsigned char)p[end - 1])) end--;
+	if (end >= name_sz) end = name_sz - 1;
+	memcpy(out_name, p, end);
+	out_name[end] = '\0';
+
+	// Programme (text between "Programme=" and "Mark=")
+	p = strstr(args, "Programme=");
+	q = strstr(args, "Mark=");
+	if (!p || !q || q <= p) return 0;
+	p += strlen("Programme=");
+	len = (size_t)(q - p);
+	while (len > 0 && isspace((unsigned char)*p)) { p++; len--; }
+	end = len;
+	while (end > 0 && isspace((unsigned char)p[end - 1])) end--;
+	if (end >= prog_sz) end = prog_sz - 1;
+	memcpy(out_prog, p, end);
+	out_prog[end] = '\0';
+
+	// Mark
+	p = strstr(args, "Mark=");
+	if (!p || sscanf(p, "Mark=%lf", out_mark) != 1) return 0;
+
+	return 1;
+}
+
 int main() {
-	
+
 	// Variables
 	char command_str[20];
 	char User_ID[20];
@@ -124,14 +148,14 @@ int main() {
 			printf("Invalid username. Please try again.\n");
 		}
 	}
-	
+
 	// Program loop
 	while (program_running) {
 		// input command
 		printf("%s: Please type a Command (Type help to list commands)\n%s: ", terminal_Name, User_ID);
 		fgets(User_Input, sizeof(User_Input), stdin); // reads the whole line including spaces
 		User_Input[strcspn(User_Input, "\n")] = '\0'; // Remove trailing newline if present
-		
+
 		//Split into command and arguments
 		sscanf(User_Input, "%s %[^\n]", command_str, args);
 
@@ -142,83 +166,89 @@ int main() {
 		}
 
 		switch (getCommandType(command_str)) {
-			case CMD_OPEN:
-				// Checks if the list is empty if it is not empty clear the list
-				if (head != NULL) {
-					Clear_List(head);
-					head = NULL;
-				}
-				if (Open_File(file_name, &head) == 1) {
-					printf("%s: The database file %s is successfully opened.\n", terminal_Name, file_name);
-				}
-				else {
-					printf("%s: The file was not successfully opened.\n", terminal_Name);
-				}
-				break;
-			case CMD_SAVE:
-				if (Save_File(file_name, head) == 1) {
-					printf("%s: The database file %s is successfully saved.\n", terminal_Name, file_name);
-				}
-				else {
-					printf("%s: The database file “P1_1-CMS.txt” was not saved.\n", terminal_Name);
-				}
-				break;
-			case CMD_HELP:
-				printf("Options:\n"
-					" 1) OPEN    : Opens File\n"
-					" 2) SAVE    : Saves File\n"
-					" 3) HELP    : Opens the help menu\n"		
-					" 4) SHOWALL : Displays all records\n"
-					" 5) INSERT  : Adds a new record\n"
-					" 6) QUERY   : Searches for a record\n"
-					" 7) UPDATE  : Modifies an existing record\n"
-					" 8) DELETE  : Removes a record\n"
-					" 9) EXIT    : Exits the program\n");
-				break;
-			case CMD_SHOWALL:
-				Show_All(head);
-				break;
-			case CMD_INSERT:
-				if (sscanf(args, "ID=%d Name=\"%99[^\"]\" Programme=\"%99[^\"]\" Mark=%lf", &Student_ID, &Student_Name, &New_Program, &New_Marks) == 4) {
-					Insert_Data(&head, Student_ID, Student_Name, New_Program, New_Marks);
-				}
-				else if (sscanf(args, "ID=%d", &Student_ID) == 1) {
-					check_ID(head, Student_ID);
-				}
-				else {
-					printf("CMS: Invalid INSERT format. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
-				}
-
-				break;
-			case CMD_QUERY:
-				if (sscanf(args, "ID=%d", &Student_ID) == 1) {
-					Search_id(head, Student_ID);
-				}
-				else {
-					printf("CMS: Invalid QUERY format. Use: QUERY ID=<id>\n");
-				}
-				break;
-			case CMD_UPDATE:
-				Update_New(&head, args);
-				break;
-			case CMD_DELETE:
-				if (sscanf(args, "ID=%d", &Student_ID) == 1) {
-					Delete_Record(&head, Student_ID);
-				}
-				else {
-					printf("CMS: Invalid DELETE format. Use: DELETE ID=<id>\n");
-				}
-				break;
-			case CMD_EXIT:
-				printf("Exiting CMS.....\n");
+		case CMD_OPEN:
+			// Checks if the list is empty if it is not empty clear the list
+			if (head != NULL) {
 				Clear_List(head);
 				head = NULL;
-				program_running = 0;
-				break;
-			case CMD_UNKNOWN:
-			default:
-				printf("Unknown command. Please Try Again or Type Help\n");
-				break;
+			}
+			if (Open_File(file_name, &head) == 1) {
+				printf("%s: The database file %s is successfully opened.\n", terminal_Name, file_name);
+			}
+			else {
+				printf("%s: The file was not successfully opened.\n", terminal_Name);
+			}
+			break;
+		case CMD_SAVE:
+			if (Save_File(file_name, head) == 1) {
+				printf("%s: The database file %s is successfully saved.\n", terminal_Name, file_name);
+			}
+			else {
+				printf("%s: The database file “P1_1-CMS.txt” was not saved.\n", terminal_Name);
+			}
+			break;
+		case CMD_SHOWALL:
+			Show_All(head);
+			break;
+		case CMD_INSERT:
+			if (parse_insert_args(args, &Student_ID, Student_Name, sizeof(Student_Name), New_Program, sizeof(New_Program), &New_Marks)) {
+				Insert_Data(&head, Student_ID, Student_Name, New_Program, New_Marks);
+			}
+			else if (sscanf(args, "ID=%d", &Student_ID) == 1) {
+				if (check_ID(head, Student_ID)) {
+					printf("CMS: The record with ID=%d already exists.\n", Student_ID);
+					printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+				}
+				else {
+					printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
+					printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+				}
+			}
+			else {
+				printf("CMS: Invalid INSERT format. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+			}
+			break;
+		case CMD_QUERY:
+			if (sscanf(args, "ID=%d", &Student_ID) == 1) {
+				Search_id(head, Student_ID);
+			}
+			else {
+				printf("CMS: Invalid QUERY format. Use: QUERY ID=<id>\n");
+			}
+			break;
+		case CMD_UPDATE:
+			Update_New(&head, args);
+			break;
+		case CMD_DELETE:
+			if (sscanf(args, "ID=%d", &Student_ID) == 1) {
+				Delete_Record(&head, Student_ID);
+			}
+			else {
+				printf("CMS: Invalid DELETE format. Use: DELETE ID=<id>\n");
+			}
+			break;
+		case CMD_HELP:
+			printf("Options:\n"
+				" 1) OPEN    : Opens File\n"
+				" 2) SAVE    : Saves File\n"
+				" 3) HELP    : Opens the help menu\n"
+				" 4) SHOWALL : Displays all records\n"
+				" 5) INSERT  : Adds a new record\n"
+				" 6) QUERY   : Searches for a record\n"
+				" 7) UPDATE  : Modifies an existing record\n"
+				" 8) DELETE  : Removes a record\n"
+				" 9) EXIT    : Exits the program\n");
+			break;
+		case CMD_EXIT:
+			printf("Exiting CMS.....\n");
+			Clear_List(head);
+			head = NULL;
+			program_running = 0;
+			break;
+		case CMD_UNKNOWN:
+		default:
+			printf("Unknown command. Please Try Again or Type Help\n");
+			break;
 		}
 	}
 	return 0;
