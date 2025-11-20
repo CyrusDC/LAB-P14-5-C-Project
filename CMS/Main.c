@@ -137,6 +137,7 @@ int main() {
 		User_Input[strcspn(User_Input, "\n")] = '\0'; // Remove trailing newline if present
 
 		//Split into command and arguments
+		args[0] = '\0';
 		sscanf(User_Input, "%s %[^\n]", command_str, args);
 
 		// converts the string input to all lower letters
@@ -167,10 +168,10 @@ int main() {
 			}
 			break;
 		case CMD_SHOWALL:
-			if (args == NULL || strcmp(args, "") == 0) {
+			if (args[0] == '\0') {
 				Show_All(head);
 			}
-			else if (strcmp(args, "SORT BY ID") == 0) {
+			if (strcmp(args, "SORT BY ID") == 0) {
 				Sort_ID(head);
 			}
 			else if (strcmp(args, "SORT BY MARKS") == 0) {
@@ -220,16 +221,16 @@ int main() {
 			break;
 		case CMD_HELP:
 			printf("Options:\n"
-				" 1)  OPEN        : Opens File\n"
-				" 2)  SAVE        : Saves File\n"
-				" 3)  HELP        : Opens the help menu\n"
-				" 4)  SHOWALL     : Displays all records\n"
-				" 5)  SHOWSUMMARY : Displays summary of records\n"
-				" 6)  INSERT      : Adds a new record\n"
-				" 7)  QUERY       : Searches for a record\n"
-				" 8)  UPDATE      : Modifies an existing record\n"
-				" 9)  DELETE      : Removes a record\n"
-				" 10) EXIT        : Exits the program\n");
+				" 1)  OPEN        : Opens File.\n"
+				" 2)  SAVE        : Saves File.\n"
+				" 3)  HELP        : Opens the help menu.\n"
+				" 4)  SHOWALL     : Displays all records and able to SORT by ID or Marks.\n"
+				" 5)  SHOWSUMMARY : Displays summary of records.\n"
+				" 6)  INSERT      : Adds a new record.\n"
+				" 7)  QUERY       : Searches for a record.\n"
+				" 8)  UPDATE      : Modifies an existing record.\n"
+				" 9)  DELETE      : Removes a record.\n"
+				" 10) EXIT        : Exits the program.\n");
 			break;
 		case CMD_EXIT:
 			printf("Exiting CMS.....\n");
