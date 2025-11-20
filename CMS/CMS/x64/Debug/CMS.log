@@ -1,2 +1,3 @@
-﻿  CMS.c
+﻿  Main.c
+B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\Main.c(114,6): warning C4101: 'total': unreferenced local variable
   CMS.vcxproj -> B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\x64\Debug\CMS.exe

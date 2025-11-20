@@ -120,3 +120,29 @@ RecordPtr Delete_Node(RecordPtr head, int Target_ID) {
 
 }
 //-----------------------------------------------------------------------//
+// Find highest record based on marks
+RecordPtr Highest_Record(RecordPtr head) {
+    RecordPtr current = head->next;
+    RecordPtr highest = head;
+    while (current != NULL) {
+        if (current->marks > highest->marks) {
+            highest = current;
+        }
+        current = current->next;
+    }
+    return highest;
+}
+
+// Find lowest record based on marks
+RecordPtr Lowest_Record(RecordPtr head) {
+    RecordPtr current = head->next;
+    RecordPtr lowest = head;
+    while (current != NULL) {
+        if (current->marks < lowest->marks) {
+            lowest = current;
+        }
+        current = current->next;
+    }
+    return lowest;
+}
+//-----------------------------------------------------------------------//

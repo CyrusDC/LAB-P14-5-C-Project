@@ -20,16 +20,25 @@ RecordPtr Insert_Tail(RecordPtr head, int New_ID, const char* Student_Name, cons
 RecordPtr Delete_Node(RecordPtr head, int Target_ID); // Delete a node based on ID number
 RecordPtr Update_Node_Program(RecordPtr head, int ID, const char* New_Program); // Change the node information for program
 RecordPtr Update_Node_Marks(RecordPtr head, int ID, double New_Marks); // Change the node information for marks
+RecordPtr Lowest_Record(RecordPtr head); // Find lowest record based on marks
+RecordPtr Highest_Record(RecordPtr head); // Find highest record based on marks
 
 //-------------------------------------------------------------------//
 // CMS.c Functions
 int Open_File(const char* file, RecordPtr* head); // Open File function
 void Clear_List(RecordPtr head); // clear the list
 void Show_All(RecordPtr head); // Show All function
+void Sort_ID(RecordPtr head); // Show All sorted by ID function
+void Sort_Marks(RecordPtr head); // Show All sorted by Marks function
 void Search_id(RecordPtr head, int Student_ID); // Query Function
 void Insert_Data(RecordPtr* head, int New_ID, const char* Student_Name, const char* New_Program, double New_Marks); // Insert Function
+int Parse_Insert_Args(const char* args, int* Output_ID, char* Output_Name, size_t Name_Size, char* Output_Program, size_t Program_Size, double* Output_Mark); // Insert parse function
 int check_ID(RecordPtr head, int New_ID); // Check if ID exists
 void Delete_Record(RecordPtr* head, int Student_ID); // Delete Function
 int Save_File(const char* file, RecordPtr head); // Save Function
 void Update_New(RecordPtr* head, const char* args); // Update function
+void Show_Summary(RecordPtr head); // Show Summary function
+
+
+
 #endif

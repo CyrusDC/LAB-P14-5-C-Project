@@ -14,6 +14,7 @@ typedef enum {
 	CMD_SAVE,
 	CMD_HELP,
 	CMD_SHOWALL,
+	CMD_SHOWSUMMARY,
 	CMD_INSERT,
 	CMD_QUERY,
 	CMD_UPDATE,
@@ -35,6 +36,9 @@ static CommandType getCommandType(const char* command) {
 	}
 	else if (strcmp(command, "showall") == 0) {
 		return CMD_SHOWALL;
+	}
+	else if (strcmp(command, "showsummary") == 0) {
+		return CMD_SHOWSUMMARY;
 	}
 	else if (strcmp(command, "insert") == 0) {
 		return CMD_INSERT;
@@ -67,7 +71,7 @@ static int Valid_User_Id(const char* id) {
 	return 1;  // everything else is allowed
 }
 
-void decleration() {
+static void decleration() {
 	printf("Declaration\n"
 		"SIT’s policy on copying does not allow the students to copy source code as well as assessment solutions\n"
 		"from another person AI or other places. It is the students’ responsibility to guarantee that their\n"
@@ -91,89 +95,6 @@ void decleration() {
 		"Date: 23 November 2025.\n\n"
 	);
 }
-
-// Function to parse insert command args
-static int Parse_Insert_Args(const char* args,int* Output_ID,char* Output_Name, size_t Name_Size,char* Output_Program, size_t Program_Size,double* Output_Mark)
-{
-	const char* start;
-	const char* end;
-	size_t length;
-
-	// Check for valid id
-	start = strstr(args, "ID=");
-	if (start == NULL || sscanf(start, "ID=%d", Output_ID) != 1) {
-		return 0;   // couldn't find ID or invalid number
-	}
-
-	// Check for name
-	start = strstr(args, "Name=");
-	end = strstr(args, "Programme=");
-
-	if (start == NULL || end == NULL || end <= start) {
-		return 0;   // wrong format or missing fields
-	}
-
-	start += strlen("Name=");
-	length = (size_t)(end - start);
-
-	// trim leading spaces
-	while (length > 0 && isspace((unsigned char)*start)) {
-		start++;
-		length--;
-	}
-
-	// trim trailing spaces
-	while (length > 0 && isspace((unsigned char)start[length - 1])) {
-		length--;
-	}
-
-	if (length >= Name_Size) {
-		length = Name_Size - 1;
-	}
-
-	strncpy(Output_Name, start, length);
-	Output_Name[length] = '\0';
-
-
-	// Check for Programme
-	start = strstr(args, "Programme=");
-	end = strstr(args, "Mark=");
-
-	if (start == NULL || end == NULL || end <= start) {
-		return 0;
-	}
-
-	start += strlen("Programme=");
-	length = (size_t)(end - start);
-
-	// trim leading spaces
-	while (length > 0 && isspace((unsigned char)*start)) {
-		start++;
-		length--;
-	}
-
-	// trim trailing spaces
-	while (length > 0 && isspace((unsigned char)start[length - 1])) {
-		length--;
-	}
-
-	if (length >= Program_Size) {
-		length = Program_Size - 1;
-	}
-
-	strncpy(Output_Program, start, length);
-	Output_Program[length] = '\0';
-
-
-	// Check for marks
-	start = strstr(args, "Mark=");
-	if (start == NULL || sscanf(start, "Mark=%lf", Output_Mark) != 1) {
-		return 0;
-	}
-
-	return 1;   // successfully parsed all fields
-}
-
 
 int main() {
 
@@ -218,7 +139,6 @@ int main() {
 		//Split into command and arguments
 		sscanf(User_Input, "%s %[^\n]", command_str, args);
 
-
 		// converts the string input to all lower letters
 		for (int i = 0; command_str[i] != '\0'; i++) {
 			command_str[i] = tolower((unsigned char)command_str[i]);
@@ -247,7 +167,18 @@ int main() {
 			}
 			break;
 		case CMD_SHOWALL:
-			Show_All(head);
+			if (args == NULL || strcmp(args, "") == 0) {
+				Show_All(head);
+			}
+			else if (strcmp(args, "SORT BY ID") == 0) {
+				Sort_ID(head);
+			}
+			else if (strcmp(args, "SORT BY MARKS") == 0) {
+				Sort_Marks(head);
+			}
+			break;
+		case CMD_UPDATE:
+			Update_New(&head, args);
 			break;
 		case CMD_INSERT:
 			if (Parse_Insert_Args(args, &Student_ID, Student_Name, sizeof(Student_Name), New_Program, sizeof(New_Program), &New_Marks)) {
@@ -276,8 +207,8 @@ int main() {
 				printf("CMS: Invalid QUERY format. Use: QUERY ID=<id>\n");
 			}
 			break;
-		case CMD_UPDATE:
-			Update_New(&head, args);
+		case CMD_SHOWSUMMARY:
+			Show_Summary(head);
 			break;
 		case CMD_DELETE:
 			if (sscanf(args, "ID=%d", &Student_ID) == 1) {
@@ -289,15 +220,16 @@ int main() {
 			break;
 		case CMD_HELP:
 			printf("Options:\n"
-				" 1) OPEN    : Opens File\n"
-				" 2) SAVE    : Saves File\n"
-				" 3) HELP    : Opens the help menu\n"
-				" 4) SHOWALL : Displays all records\n"
-				" 5) INSERT  : Adds a new record\n"
-				" 6) QUERY   : Searches for a record\n"
-				" 7) UPDATE  : Modifies an existing record\n"
-				" 8) DELETE  : Removes a record\n"
-				" 9) EXIT    : Exits the program\n");
+				" 1)  OPEN        : Opens File\n"
+				" 2)  SAVE        : Saves File\n"
+				" 3)  HELP        : Opens the help menu\n"
+				" 4)  SHOWALL     : Displays all records\n"
+				" 5)  SHOWSUMMARY : Displays summary of records\n"
+				" 6)  INSERT      : Adds a new record\n"
+				" 7)  QUERY       : Searches for a record\n"
+				" 8)  UPDATE      : Modifies an existing record\n"
+				" 9)  DELETE      : Removes a record\n"
+				" 10) EXIT        : Exits the program\n");
 			break;
 		case CMD_EXIT:
 			printf("Exiting CMS.....\n");
