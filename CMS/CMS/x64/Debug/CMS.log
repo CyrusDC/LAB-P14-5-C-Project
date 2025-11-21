@@ -1,2 +1,5 @@
-﻿  Main.c
+﻿  CMS.c
+  Main.c
+  Storage.c
+  Generating Code...
   CMS.vcxproj -> B:\VSCODE\GIT_REPOS\LAB-P14-5-C-Project\CMS\x64\Debug\CMS.exe

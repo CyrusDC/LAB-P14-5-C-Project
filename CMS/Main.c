@@ -14,7 +14,7 @@ typedef enum {
 	CMD_SAVE,
 	CMD_HELP,
 	CMD_SHOWALL,
-	CMD_SHOWSUMMARY,
+	CMD_SUMMARY,
 	CMD_INSERT,
 	CMD_QUERY,
 	CMD_UPDATE,
@@ -34,11 +34,11 @@ static CommandType getCommandType(const char* command) {
 	else if (strcmp(command, "help") == 0) {
 		return CMD_HELP;
 	}
-	else if (strcmp(command, "showall") == 0) {
+	else if (strcmp(command, "show") == 0) {
 		return CMD_SHOWALL;
 	}
-	else if (strcmp(command, "showsummary") == 0) {
-		return CMD_SHOWSUMMARY;
+	else if (strcmp(command, "summary") == 0) {
+		return CMD_SUMMARY;
 	}
 	else if (strcmp(command, "insert") == 0) {
 		return CMD_INSERT;
@@ -140,7 +140,7 @@ int main() {
 		// use field widths to avoid buffer overflows
 		sscanf(User_Input, "%s %[^\n]", command_str, args);
 
-		// converts the string input to all lower letters (command)
+		// converts the command string input to all lower letters (command)
 		for (int i = 0; command_str[i] != '\0'; i++) {
 			command_str[i] = tolower((unsigned char)command_str[i]);
 		}
@@ -168,13 +168,17 @@ int main() {
 			}
 			break;
 		case CMD_SHOWALL:
-			if (args[0] == '\0') {
+			// set args to lowercase for easier comparison
+			for (int i = 0; args[i] != '\0'; i++) {
+				args[i] = tolower((unsigned char)args[i]);
+			}
+			if (strcmp(args, "all") == 0) {
 				Show_All(head);
 			}
-			else if (strcmp(args, "SORT BY ID") == 0) {
+			else if (strcmp(args, "all sort by id") == 0) {
 				Sort_ID(head);
 			}
-			else if (strcmp(args, "SORT BY MARKS") == 0) {
+			else if (strcmp(args, "all sort by marks") == 0) {
 				Sort_Marks(head);
 			}
 			else {
@@ -190,7 +194,7 @@ int main() {
 			}
 			// checks if only ID was typed
 			else if (sscanf(args, "ID=%d", &Student_ID) == 1) {
-				if(head == NULL) {
+				if (head == NULL) {
 					printf("CMS: No records found. Please Open a file first.\n");
 					break;
 				}
@@ -217,7 +221,7 @@ int main() {
 				printf("CMS: Invalid QUERY format. Use: QUERY ID=<id>\n");
 			}
 			break;
-		case CMD_SHOWSUMMARY:
+		case CMD_SUMMARY:
 			Show_Summary(head);
 			break;
 		case CMD_DELETE:
@@ -230,16 +234,16 @@ int main() {
 			break;
 		case CMD_HELP:
 			printf("Options:\n"
-				" 1)  OPEN        : Opens File.\n"
-				" 2)  SAVE        : Saves File.\n"
-				" 3)  HELP        : Opens the help menu.\n"
-				" 4)  SHOWALL     : Displays all records and able to SORT by ID or Marks.\n"
-				" 5)  SHOWSUMMARY : Displays summary of records.\n"
-				" 6)  INSERT      : Adds a new record.\n"
-				" 7)  QUERY       : Searches for a record.\n"
-				" 8)  UPDATE      : Modifies an existing record.\n"
-				" 9)  DELETE      : Removes a record.\n"
-				" 10) EXIT        : Exits the program.\n");
+				" 1)  OPEN         : Opens File.\n"
+				" 2)  SAVE         : Saves File.\n"
+				" 3)  HELP         : Opens the help menu.\n"
+				" 4)  SHOW ALL     : Displays all records and able to SORT by ID or Marks.\n"
+				" 5)  SUMMARY      : Displays summary of records.\n"
+				" 6)  INSERT       : Adds a new record.\n"
+				" 7)  QUERY        : Searches for a record.\n"
+				" 8)  UPDATE       : Modifies an existing record.\n"
+				" 9)  DELETE       : Removes a record.\n"
+				" 10) EXIT         : Exits the program.\n");
 			break;
 		case CMD_EXIT:
 			printf("Exiting CMS.....\n");
