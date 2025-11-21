@@ -111,7 +111,6 @@ int main() {
 	char New_Program[100];
 	double New_Marks;
 	RecordPtr head = NULL;
-	int total;
 
 	decleration();
 	printf("Welcome to the Class Management System (CMS)\n");
@@ -138,9 +137,10 @@ int main() {
 
 		//Split into command and arguments
 		args[0] = '\0';
+		// use field widths to avoid buffer overflows
 		sscanf(User_Input, "%s %[^\n]", command_str, args);
 
-		// converts the string input to all lower letters
+		// converts the string input to all lower letters (command)
 		for (int i = 0; command_str[i] != '\0'; i++) {
 			command_str[i] = tolower((unsigned char)command_str[i]);
 		}
@@ -171,11 +171,14 @@ int main() {
 			if (args[0] == '\0') {
 				Show_All(head);
 			}
-			if (strcmp(args, "SORT BY ID") == 0) {
+			else if (strcmp(args, "SORT BY ID") == 0) {
 				Sort_ID(head);
 			}
 			else if (strcmp(args, "SORT BY MARKS") == 0) {
 				Sort_Marks(head);
+			}
+			else {
+				printf("CMS: Unknown SHOWALL arguments. Use: SHOWALL or SHOWALL SORT BY ID|MARKS\n");
 			}
 			break;
 		case CMD_UPDATE:
@@ -187,13 +190,19 @@ int main() {
 			}
 			// checks if only ID was typed
 			else if (sscanf(args, "ID=%d", &Student_ID) == 1) {
-				if (check_ID(head, Student_ID)) {
-					printf("CMS: The record with ID=%d already exists.\n", Student_ID);
-					printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+				if(head == NULL) {
+					printf("CMS: No records found. Please Open a file first.\n");
+					break;
 				}
 				else {
-					printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
-					printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+					if (check_ID(head, Student_ID)) {
+						printf("CMS: The record with ID=%d already exists.\n", Student_ID);
+						printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+					}
+					else {
+						printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
+						printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+					}
 				}
 			}
 			else {

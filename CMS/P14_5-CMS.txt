@@ -9,6 +9,6 @@ Table: StudentRecords
 ID	Name			Programme		Mark
 2201234	Isaac Teo		Computer Science	63.4
 2304567	John Levoy		Digital Supply Chain	85.9
+2401234	Michelle Lee		Computer Science	75.2
 2501172	Cyrus Del C		Computer Engineering	75.3
 2501234	Hong Lee		Mechanical Engineering	95.2
-2401234	Michelle Lee		Computer Science	75.2

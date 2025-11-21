@@ -39,6 +39,4 @@ int Save_File(const char* file, RecordPtr head); // Save Function
 void Update_New(RecordPtr* head, const char* args); // Update function
 void Show_Summary(RecordPtr head); // Show Summary function
 
-
-
 #endif

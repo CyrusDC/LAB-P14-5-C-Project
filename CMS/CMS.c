@@ -67,35 +67,40 @@ int Open_File(const char* file, RecordPtr* head) {
 //-------------------------------------------------------------------//
 // SAVE Function
 int Save_File(const char* file, RecordPtr head) {
-	FILE* fh_output;
-	fh_output = fopen(file, "w");
-	if (fh_output == NULL) {
+	if (head == NULL) {
+		printf("CMS: No records found. Please Open a file first.\n");
 		return -1; // failed
 	}
 	else {
-		fprintf(fh_output, "Database: Student-Records-CMS\n");
-		fprintf(fh_output, "Authors: Cyrus Del Carmen,\n"
-							"Nasyirah Binte Mohd Shariff,\n"
-							"Siew Wee Kiam Eugene,\n"
-							"Lim Jun Wei,\n"
-							"Muhamad Akid Qusyairi Bin Muhamad Riduan\n\n"
-		);
-		fprintf(fh_output, "Table: StudentRecords\n");
-		fprintf(fh_output, "%s\t%s\t\t\t%s\t\t%s\n", "ID", "Name", "Programme", "Mark");
-
-		RecordPtr current = head;
-		while (current != NULL) {
-			fprintf(fh_output, "%d\t%s\t\t%s\t%.1f\n",
-				current->id,
-				current->name,
-				current->program,
-				current->marks);
-			current = current->next;
+		FILE* fh_output;
+		fh_output = fopen(file, "w");
+		if (fh_output == NULL) {
+			return -1; // failed
 		}
+		else {
+			fprintf(fh_output, "Database: Student-Records-CMS\n");
+			fprintf(fh_output, "Authors: Cyrus Del Carmen,\n"
+				"Nasyirah Binte Mohd Shariff,\n"
+				"Siew Wee Kiam Eugene,\n"
+				"Lim Jun Wei,\n"
+				"Muhamad Akid Qusyairi Bin Muhamad Riduan\n\n"
+			);
+			fprintf(fh_output, "Table: StudentRecords\n");
+			fprintf(fh_output, "%s\t%s\t\t\t%s\t\t%s\n", "ID", "Name", "Programme", "Mark");
 
-		fclose(fh_output);
-		return 1; // success
+			RecordPtr current = head;
+			while (current != NULL) {
+				fprintf(fh_output, "%d\t%s\t\t%s\t%.1f\n",
+					current->id,
+					current->name,
+					current->program,
+					current->marks);
+				current = current->next;
+			}
 
+			fclose(fh_output);
+			return 1; // success
+		}
 	}
 }
 //-------------------------------------------------------------------//
@@ -222,16 +227,16 @@ void Sort_Marks(RecordPtr head) {
 // Show Summary Function
 void Show_Summary(RecordPtr head) {
 	RecordPtr current = head;
-	RecordPtr lowest = Lowest_Record(head);
-	RecordPtr highest = Highest_Record(head);	
-	int count = 0;
-	double total_marks = 0.0;
-	double average_marks = 0.0;
 	if (current == NULL) {
 		printf("CMS: No records found. Please Open a file first.\n");
 		return;
 	}
 	else {
+		RecordPtr lowest = Lowest_Record(head);
+		RecordPtr highest = Highest_Record(head);
+		int count = 0;
+		double total_marks = 0.0;
+		double average_marks = 0.0;
 		while (current != NULL) {
 			count++;
 			total_marks += current->marks;
@@ -330,36 +335,49 @@ int Parse_Insert_Args(const char* args, int* Output_ID, char* Output_Name, size_
 }
 
 void Insert_Data(RecordPtr* head, int New_ID, const char* Student_Name, const char* New_Program, double New_Marks) {
-	if (check_ID(*head, New_ID) == 1) {
-		printf("CMS: Insert failed. Duplicate ID=%d.\n", New_ID);
+	if (head == NULL || *head == NULL) {
+		printf("CMS: No records found. Please Open a file first.\n");
 		return;
 	}
-	*head = Insert_Tail(*head, New_ID, Student_Name, New_Program, New_Marks);
-	printf("CMS: A new record with ID=%d is successfully inserted.\n", New_ID);
-
+	else {
+		if (check_ID(*head, New_ID) == 1) {
+			printf("CMS: Insert failed. Duplicate ID=%d.\n", New_ID);
+			return;
+		}
+		else {
+			*head = Insert_Tail(*head, New_ID, Student_Name, New_Program, New_Marks);
+			printf("CMS: A new record with ID=%d is successfully inserted.\n", New_ID);
+		}
+	}
 }
 int check_ID(RecordPtr head, int New_ID) {
 	RecordPtr current = Search_Record(head, New_ID);
-		if (current != NULL) {
-			return 1; // found
-		}
-		return 0; // not found
+	if (current != NULL) {
+		return 1; // found
+	}
+	return 0; // not found
 }
 //-------------------------------------------------------------------//
 // QUERY Function
 void Search_id(RecordPtr head, int Student_ID) {
-	RecordPtr found = Search_Record(head, Student_ID);
-	if (found != NULL) {
-		printf("CMS: The record with ID=%d is found in the data table.\n", Student_ID);
-		printf("%-8s  %-20s  %-25s  %5s\n", "ID", "Name", "Programme", "Mark");
-		printf("%-8d  %-20s  %-25s  %5.1f\n",
-			found->id,
-			found->name,
-			found->program,
-			found->marks);
+	if(head == NULL) {
+		printf("CMS: No records found. Please Open a file first.\n");
+		return;
 	}
 	else {
-		printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
+		RecordPtr found = Search_Record(head, Student_ID);
+		if (found != NULL) {
+			printf("CMS: The record with ID=%d is found in the data table.\n", Student_ID);
+			printf("%-8s  %-20s  %-25s  %5s\n", "ID", "Name", "Programme", "Mark");
+			printf("%-8d  %-20s  %-25s  %5.1f\n",
+				found->id,
+				found->name,
+				found->program,
+				found->marks);
+		}
+		else {
+			printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
+		}
 	}
 }
 //-------------------------------------------------------------------//
@@ -395,7 +413,7 @@ static int Parse_Update_Args(const char* args, int* Output_ID, int* Output_Mark,
 
 		// If the value is quoted, skip parsing (we only want unquoted values)
 		if (*Start_Str == '"') {
-			// Do not set Output_Program; quoted values are ignored by this parser.
+			return -1;// Do not set Output_Program; quoted values are ignored by this parser.
 		}
 		else {
 			// unquoted: read up to next field marker ("Mark=") or end
@@ -423,41 +441,72 @@ static int Parse_Update_Args(const char* args, int* Output_ID, int* Output_Mark,
 // UPDATE Function
 void Update_New(RecordPtr* head, const char* args) {
 
-	if (!Parse_Update_Args(args, &id, &Output_Mark, &marks, &Output_Program, program, sizeof(program))) {
-		printf("CMS: Invalid UPDATE format. Use: UPDATE ID=<id> Mark=<marks> or Programme=<programme>\n");
+	if(head == NULL || *head == NULL) {
+		printf("CMS: No records found. Please Open a file first.\n");
 		return;
 	}
+	else {
+		if (!Parse_Update_Args(args, &id, &Output_Mark, &marks, &Output_Program, program, sizeof(program))) {
+			printf("CMS: Invalid UPDATE format. Use: UPDATE ID=<id> Mark=<marks> or Programme=<programme>\n");
+			return;
+		}
 
-	// If programme requested, update it first
-	if (Output_Program) {
-		*head = Update_Node_Program(*head, id, program);
-	}
+		// If programme requested, update it first
+		if (Output_Program) {
+			*head = Update_Node_Program(*head, id, program);
+		}
 
-	// If mark requested, update it
-	if (Output_Mark) {
-		*head = Update_Node_Marks(*head, id, marks);
+		// If mark requested, update it
+		if (Output_Mark) {
+			*head = Update_Node_Marks(*head, id, marks);
+		}
 	}
 }
 //-------------------------------------------------------------------//
 // DELETE Function
 void Delete_Record(RecordPtr* head, int Student_ID) {
-	// Use Search_Record to check existence
-	RecordPtr found = Search_Record(*head, Student_ID);
-	if (found == NULL) {
-		printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
+	if (head == NULL || *head == NULL) {
+		printf("CMS: No records found. Please Open a file first.\n");
 		return;
 	}
-	printf("CMS: Are you sure you want to delete record with ID=%d? Type Y to confirm or N to cancel: ", Student_ID);
-	fgets(User_Ans, sizeof(User_Ans), stdin);
-	User_Ans[strcspn(User_Ans, "\n")] = '\0'; // Remove trailing newline if present
-	if (strcmp(User_Ans, "Y") == 0 || strcmp(User_Ans, "y") == 0) {
-		*head = Delete_Node(*head, Student_ID);  // call delete node function
+	else
+	{
+		// Use Search_Record to check existence
+		RecordPtr found = Search_Record(*head, Student_ID);
+		if (found == NULL) {
+			printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
+			return;
+		}
+		printf("CMS: Are you sure you want to delete record with ID=%d? Type Y to confirm or N to cancel: ", Student_ID);
+		fgets(User_Ans, sizeof(User_Ans), stdin);
+		User_Ans[strcspn(User_Ans, "\n")] = '\0'; // Remove trailing newline if present
+		if (strcmp(User_Ans, "Y") == 0 || strcmp(User_Ans, "y") == 0) {
+			*head = Delete_Node(*head, Student_ID);  // call delete node function
+		}
+		else if (strcmp(User_Ans, "N") == 0 || strcmp(User_Ans, "n") == 0) {
+			printf("CMS: The deletion is cancelled.\n");
+		}
+		else {
+			printf("CMS: Invalid input. Deletion cancelled.\n");
+		}
 	}
-	else if (strcmp(User_Ans, "N") == 0 || strcmp(User_Ans, "n") == 0) {
-		printf("CMS: The deletion is cancelled.\n");
-	}
-	else {
-		printf("CMS: Invalid input. Deletion cancelled.\n");
-	}
+	//// Use Search_Record to check existence
+	//RecordPtr found = Search_Record(*head, Student_ID);
+	//if (found == NULL) {
+	//	printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
+	//	return;
+	//}
+	//printf("CMS: Are you sure you want to delete record with ID=%d? Type Y to confirm or N to cancel: ", Student_ID);
+	//fgets(User_Ans, sizeof(User_Ans), stdin);
+	//User_Ans[strcspn(User_Ans, "\n")] = '\0'; // Remove trailing newline if present
+	//if (strcmp(User_Ans, "Y") == 0 || strcmp(User_Ans, "y") == 0) {
+	//	*head = Delete_Node(*head, Student_ID);  // call delete node function
+	//}
+	//else if (strcmp(User_Ans, "N") == 0 || strcmp(User_Ans, "n") == 0) {
+	//	printf("CMS: The deletion is cancelled.\n");
+	//}
+	//else {
+	//	printf("CMS: Invalid input. Deletion cancelled.\n");
+	//}
 }
 //-------------------------------------------------------------------//
