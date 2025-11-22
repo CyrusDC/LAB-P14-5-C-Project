@@ -423,7 +423,7 @@ static int Parse_Update_Args(const char* args, int* Output_ID, int* Output_Mark,
 
 		// If the value is quoted, skip parsing (we only want unquoted values)
 		if (*Start_Str == '"') {
-			return -1;// Do not set Output_Program; quoted values are ignored by this parser.
+			return -1;// If the programme is quoted, return invalid
 		}
 		else {
 			// unquoted: read up to next field marker ("Mark=") or end
