@@ -490,23 +490,5 @@ void Delete_Record(RecordPtr* head, int Student_ID) {
 			printf("CMS: Invalid input. Deletion cancelled.\n");
 		}
 	}
-	//// Use Search_Record to check existence
-	//RecordPtr found = Search_Record(*head, Student_ID);
-	//if (found == NULL) {
-	//	printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
-	//	return;
-	//}
-	//printf("CMS: Are you sure you want to delete record with ID=%d? Type Y to confirm or N to cancel: ", Student_ID);
-	//fgets(User_Ans, sizeof(User_Ans), stdin);
-	//User_Ans[strcspn(User_Ans, "\n")] = '\0'; // Remove trailing newline if present
-	//if (strcmp(User_Ans, "Y") == 0 || strcmp(User_Ans, "y") == 0) {
-	//	*head = Delete_Node(*head, Student_ID);  // call delete node function
-	//}
-	//else if (strcmp(User_Ans, "N") == 0 || strcmp(User_Ans, "n") == 0) {
-	//	printf("CMS: The deletion is cancelled.\n");
-	//}
-	//else {
-	//	printf("CMS: Invalid input. Deletion cancelled.\n");
-	//}
 }
 //-------------------------------------------------------------------//

@@ -1,4 +1,3 @@
-
 // This file will handle all the database functions and allocate memory
 
 // Include libraries

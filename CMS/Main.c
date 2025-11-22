@@ -92,7 +92,7 @@ static void decleration() {
 		"3. Del Carmen Cyrus Aldwin Haboc (2501172)\n"
 		"4. Lim Jun Wei (2501117)\n"
 		"5. Muhamad Akid Qusyairi Bin Muhamad Riduan (2500882)\n\n"
-		"Date: 23 November 2025.\n\n"
+		"Date: 24 November 2025.\n\n"
 	);
 }
 
@@ -178,11 +178,11 @@ int main() {
 			else if (strcmp(args, "all sort by id") == 0) {
 				Sort_ID(head);
 			}
-			else if (strcmp(args, "all sort by marks") == 0) {
+			else if (strcmp(args, "all sort by mark") == 0) {
 				Sort_Marks(head);
 			}
 			else {
-				printf("CMS: Unknown SHOWALL arguments. Use: SHOWALL or SHOWALL SORT BY ID|MARKS\n");
+				printf("CMS: Unknown SHOWALL arguments. Use: SHOWALL or SHOWALL SORT BY ID or MARK\n");
 			}
 			break;
 		case CMD_UPDATE:
@@ -201,16 +201,16 @@ int main() {
 				else {
 					if (check_ID(head, Student_ID)) {
 						printf("CMS: The record with ID=%d already exists.\n", Student_ID);
-						printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+						printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Mark=<marks>\n");
 					}
 					else {
 						printf("CMS: The record with ID=%d does not exist.\n", Student_ID);
-						printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+						printf("CMS: Please try again. Use: INSERT ID=<id> Name=<name> Programme=<programme> Mark=<marks>\n");
 					}
 				}
 			}
 			else {
-				printf("CMS: Invalid INSERT format. Use: INSERT ID=<id> Name=<name> Programme=<programme> Marks=<marks>\n");
+				printf("CMS: Invalid INSERT format. Use: INSERT ID=<id> Name=<name> Programme=<programme> Mark=<marks>\n");
 			}
 			break;
 		case CMD_QUERY:
