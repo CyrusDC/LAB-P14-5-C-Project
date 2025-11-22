@@ -1,4 +1,4 @@
-// This file will handle all the functions such as OPEN, SAVE, SHOWALL, INSERT, QUERY, UPDATE and DELETE
+// This file will handle all the functions such as OPEN, SAVE, SHOW ALL, SUMMARY, INSERT, QUERY, UPDATE and DELETE
 
 // Include libraries
 #define _CRT_SECURE_NO_WARNINGS
@@ -75,6 +75,7 @@ int Save_File(const char* file, RecordPtr head) {
 		FILE* fh_output;
 		fh_output = fopen(file, "w");
 		if (fh_output == NULL) {
+			printf("CMS: Unable to open file %s.\n", file);
 			return -1; // failed
 		}
 		else {
@@ -294,6 +295,10 @@ int Parse_Insert_Args(const char* args, int* Output_ID, char* Output_Name, size_
 	strncpy(Output_Name, start, length);
 	Output_Name[length] = '\0';
 
+	// Reject quoted input for Name
+	if (strchr(Output_Name, '"') != NULL || strchr(Output_Name, '\'') != NULL) {
+		return 0;   // invalid: quotes not allowed
+	}
 
 	// Check for Programme
 	start = strstr(args, "Programme=");
@@ -323,6 +328,11 @@ int Parse_Insert_Args(const char* args, int* Output_ID, char* Output_Name, size_
 
 	strncpy(Output_Program, start, length);
 	Output_Program[length] = '\0';
+
+	// Reject quoted input for Programme
+	if (strchr(Output_Program, '"') != NULL || strchr(Output_Program, '\'') != NULL) {
+		return 0;   // invalid: quotes not allowed
+	}
 
 
 	// Check for marks

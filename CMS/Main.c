@@ -137,7 +137,6 @@ int main() {
 
 		//Split into command and arguments
 		args[0] = '\0';
-		// use field widths to avoid buffer overflows
 		sscanf(User_Input, "%s %[^\n]", command_str, args);
 
 		// converts the command string input to all lower letters (command)

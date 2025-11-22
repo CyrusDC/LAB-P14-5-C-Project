@@ -10,6 +10,10 @@
 // Load Records
 RecordPtr load_Record(int id, const char* name, const char* program, double marks) {
     RecordPtr newNode = malloc(sizeof(Student_records));
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+		return NULL;
+	}
     newNode->id = id;
 
     // creates a deep copy of the node if not done the output will be garbage
